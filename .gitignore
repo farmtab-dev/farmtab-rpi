@@ -1,0 +1,6 @@
+camera/node_modules
+camera/img_motion/*
+camera/img_temp_folder/*
+camera/log/*
+
+cmd/farmtab-env-*
