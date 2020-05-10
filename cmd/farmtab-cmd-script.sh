@@ -460,4 +460,15 @@ view_log(){
     pm2 log ${1}
 }
 
-
+update_software(){
+    printf "${BYELLOW} Update Raspberry Pi source code${NC}\n"
+    cd /opt/farmtab-rpi
+    git reset --hard HEAD
+    git pull
+    printf "${BGREEN}Done${NC}\n"
+    printf "${BYELLOW} Update Arduino source code${NC}\n"
+    cd /home/pi/Arduino
+    git reset --hard HEAD
+    git pull
+    printf "${BGREEN}Done${NC}\n"
+}

@@ -76,6 +76,12 @@ elif [ "${1}" == 'serial' ];then
     source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
     source /opt/farmtab-rpi/cmd/farmtab-env-serial  
     change_serial_prog   
+elif [ "${1}" == 'update' ];then 
+    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+    source /opt/farmtab-rpi/cmd/farmtab-env-serial  
+    source /opt/farmtab-rpi/cmd/farmtab-env-camera  
+    source /opt/farmtab-rpi/cmd/farmtab-env-camera-rotate  
+    update_software
 else 
     print_help 0
 fi
