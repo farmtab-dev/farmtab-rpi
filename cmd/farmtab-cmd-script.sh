@@ -403,10 +403,10 @@ change_serial_prog(){
 #------------------------------#  # https://github.com/Unitech/pm2/issues/325#issuecomment-281580956
 #  Start SENSOR/CAMERA Script  #
 #------------------------------#
-restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-${SENSOR_SERIAL/CAMERA_SERIAL} $4-S{APPNAME}
+restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${SENSOR_SERIAL/CAMERA_SERIAL} 
     clear
     print_serial_number "Current" ${2}
-    if check_emp_serial  "${1} serial number" " ${1} script" ${3}; then
+    if check_emp_serial  "${1} serial number" " ${1} script" ${4}; then
         printf "${BRED}Please run ${NC} ${BGWHITE}farmtab-cmd set_serial${NC} ${BRED}command to set serial number${NC}\n"
         return
     fi
@@ -419,7 +419,7 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-${SENSOR_SERIAL/CAMERA_SERIAL}
         fi
     fi
     if promptyn "Do you want to start ${1} script with this setting? [Y/N]"; then
-        APPNAME=$4
+        APPNAME=$3
         pm2 describe ${APPNAME} > /dev/null
         RUNNING=$?
 

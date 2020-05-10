@@ -33,7 +33,7 @@ if [ "${1}" == 'sensor' ];then
     if [ "${2}" == 'start' ];then 
         source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
         source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
-        restart_script "SENSOR" 1 ${SENSOR_SERIAL} "sensor_script"
+        restart_script "SENSOR" 1  "sensor_script" ${SENSOR_SERIAL}
     elif [ "${2}" == 'stop' ];then 
         stop_script "sensor_script"
     elif [ "${2}" == 'delete' ];then 
@@ -50,7 +50,7 @@ elif [ "${1}" == 'camera' ];then
         source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
         source /opt/farmtab-rpi/cmd/farmtab-env-serial  
         source /opt/farmtab-rpi/cmd/farmtab-env-camera  
-        restart_script "CAMERA" 2 ${CAMERA_SERIAL} "camera_script"
+        restart_script "CAMERA" 2  "camera_script" ${CAMERA_SERIAL}
     elif [ "${2}" == 'stop' ];then 
         stop_script "camera_script"
     elif [ "${2}" == 'delete' ];then 
