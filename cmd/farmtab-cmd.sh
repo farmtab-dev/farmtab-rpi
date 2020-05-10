@@ -25,7 +25,8 @@ print_help(){
     if [ $1 -eq 0 -o $1 -eq 3 ]; then
         printf "\nOTHERS :-\n"
         printf "    ${Cyan}serial${NC} - Reset serial number for both serial & camera\n"
-        printf "    ${Cyan}mongo${NC}  - Access mongodb as farmtab_admin\n"
+        printf "    ${Cyan}mongo${NC}  - Access mongodb as database admin\n"
+        printf "    ${Cyan}update${NC} - Update source code from Git Repositories\n"
     fi
 }
 
@@ -80,7 +81,7 @@ elif [ "${1}" == 'update' ];then
     source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
     source /opt/farmtab-rpi/cmd/farmtab-env-serial  
     source /opt/farmtab-rpi/cmd/farmtab-env-camera  
-    source /opt/farmtab-rpi/cmd/farmtab-env-camera-rotate  
+    source /opt/farmtab-rpi/cmd/farmtab-env-cam-rotate  
     update_software
 else 
     print_help 0
