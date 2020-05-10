@@ -466,9 +466,11 @@ update_software(){
     git reset --hard HEAD
     git pull
     printf "${BGREEN}Done${NC}\n"
+    cd -
     printf "${BYELLOW} Update Arduino source code${NC}\n"
     cd /home/pi/Arduino/farmtab-arduino
     git reset --hard HEAD
     git pull
     printf "${BGREEN}Done${NC}\n"
+    cd -
 }
