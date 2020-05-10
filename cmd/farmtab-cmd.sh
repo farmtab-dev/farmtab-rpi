@@ -31,6 +31,7 @@ print_help(){
 
 if [ "${1}" == 'sensor' ];then 
     if [ "${2}" == 'start' ];then 
+        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
         source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
         restart_script "SENSOR" 1 ${SENSOR_SERIAL} "sensor_script"
     elif [ "${2}" == 'stop' ];then 
@@ -46,8 +47,9 @@ if [ "${1}" == 'sensor' ];then
     fi
 elif [ "${1}" == 'camera' ];then 
     if [ "${2}" == 'start' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
-        source /opt/farmtab-rpi/cmd/farmtab-env-camera  # Run the latest environment variable
+        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+        source /opt/farmtab-rpi/cmd/farmtab-env-serial  
+        source /opt/farmtab-rpi/cmd/farmtab-env-camera  
         restart_script "CAMERA" 2 ${CAMERA_SERIAL} "camera_script"
     elif [ "${2}" == 'stop' ];then 
         stop_script "camera_script"
@@ -58,7 +60,8 @@ elif [ "${1}" == 'camera' ];then
     elif [ "${2}" == 'code' ];then 
         cd  /opt/farmtab-rpi/camera
     elif [ "${2}" == 'config' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-camera  # Run the latest environment variable
+        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+        source /opt/farmtab-rpi/cmd/farmtab-env-camera  
         setup_camera_config
     elif [ "${2}" == 'preview' ];then 
         source /opt/farmtab-rpi/cmd/farmtab-env-camera-rotate  # Run the latest environment variable
@@ -70,6 +73,8 @@ elif [ "${1}" == 'mongo' ];then
     source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
     mongo -u ${MONGODB_ADM_USERNAME} -p ${MONGODB_ADM_PASS} --authenticationDatabase admin
 elif [ "${1}" == 'serial' ];then 
+    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+    source /opt/farmtab-rpi/cmd/farmtab-env-serial  
     change_serial_prog   
 else 
     print_help 0

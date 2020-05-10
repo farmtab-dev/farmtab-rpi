@@ -19,14 +19,30 @@ print_serial_number() {
     printf " $1 serial numbers :- "
     printf "\n------------------------\n"
     if [ $2 -eq 0 ]; then
-        echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}\n"
-        echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
+        if [ -z "${SENSOR_SERIAL}" ]; then
+            echo -en "${BRED}No sensor serial number${NC}\n"
+        else
+            echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}\n"
+        fi
+        if [ -z "${CAMERA_SERIAL}" ]; then
+            echo -en "${BRED}No camera serial number${NC}\n"
+        else
+            echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
+        fi
         printf "\n=============================================\n"
     elif [ $2 -eq 1 ]; then 
-        echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}"
+        if [ -z "${SENSOR_SERIAL}" ]; then
+            echo -en "${BRED}No sensor serial number${NC}\n"
+        else
+            echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}\n"
+        fi
         printf "\n=============================================\n"
     elif [ $2 -eq 2 ]; then
-        echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
+        if [ -z "${CAMERA_SERIAL}" ]; then
+            echo -en "${BRED}No camera serial number${NC}\n"
+        else
+            echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
+        fi
     fi
 }
 print_camera_config() {
@@ -37,18 +53,26 @@ print_camera_config() {
     fi
     printf " $1 camera config :- "
     printf "\n------------------------\n"
-    echo -en " Camera Position : ${BGWHITE}${CAM_POS}${NC}\n"
-    echo -en " Total Cameras   : ${BGWHITE}${TOTAL_CAM}${NC}\n"
-    echo -en " Arducam slot :-\n"
-    echo -en "    > Level 1    : ${BGWHITE}${CAM_LVL1}${NC}\n"
-    if [ $TOTAL_CAM -ge 2 ]; then
-        echo -en "    > Level 2    : ${BGWHITE}${CAM_LVL2}${NC}\n"
+    if [ -z "${CAM_POS}" ]; then
+        echo -en "${BRED}No camera configuration${NC}\n"
+    else 
+        echo -en " Camera Position : ${BGWHITE}${CAM_POS}${NC}\n"
     fi
-    if [ $TOTAL_CAM -ge 3 ]; then
-        echo -en "    > Level 3    : ${BGWHITE}${CAM_LVL3}${NC}\n"
-    fi
-    if [ $TOTAL_CAM -ge 4 ]; then
-        echo -en "    > Level 4    : ${BGWHITE}${CAM_LVL4}${NC}"
+    if [ -z "${TOTAL_CAM}" ]; then
+        echo -en "${BRED}No ArduCam configuration${NC}\n"
+    else 
+        echo -en " Total Cameras   : ${BGWHITE}${TOTAL_CAM}${NC}\n"
+        echo -en " ArduCam slot :-\n"
+        echo -en "    > Level 1    : ${BGWHITE}${CAM_LVL1}${NC}\n"
+        if [ $TOTAL_CAM -ge 2 ]; then
+            echo -en "    > Level 2    : ${BGWHITE}${CAM_LVL2}${NC}\n"
+        fi
+        if [ $TOTAL_CAM -ge 3 ]; then
+            echo -en "    > Level 3    : ${BGWHITE}${CAM_LVL3}${NC}\n"
+        fi
+        if [ $TOTAL_CAM -ge 4 ]; then
+            echo -en "    > Level 4    : ${BGWHITE}${CAM_LVL4}${NC}"
+        fi
     fi
     printf "\n=============================================\n"
 }
@@ -170,6 +194,7 @@ reset_arducam_setting(){ #reset to any value other than 0,1,2,3
     LVL1=9
     LVL2=9
     LVL3=9
+    LVL4=9
 }
 prompt_and_check_arducam_code () {
     while true; do
@@ -311,7 +336,7 @@ setup_camera_config(){
         echo "export CAM_POS=${CAM_POS}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
         printf "\n${BGREEN}Committed changes for camera position.${NC}"
         echo "export TOTAL_CAM=${TOTAL_CAM}" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
-        printf "\n${BGREEN}Committed changes for total camera.${NC}"
+        printf "\n${BGREEN}Committed changes for total camera.${NC}\n"
         commit_cam_change $LVL1 "1"
         if [ $TOTAL_CAM -ge 2 ]; then
             commit_cam_change $LVL2 "2"
@@ -405,7 +430,7 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-${SENSOR_SERIAL/CAMERA_SERIAL}
             else
                 pm2 start  /opt/farmtab-rpi/camera/start_video_stream_client.js --name=${APPNAME} --silent
             fi
-            printf "${BYELLOW} Enable ${1} script on startup${NC}\n"
+            printf "${BYELLOW}Enable ${1} script on startup${NC}\n"
             pm2 save --silent
         else
             printf "${BYELLOW}Restarting ${1} script${NC}\n"
