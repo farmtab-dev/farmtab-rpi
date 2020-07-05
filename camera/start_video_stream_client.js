@@ -76,7 +76,6 @@ var cam_view_disconnect_time = 0;
 const TIME_INTERVAL_IN_MIN = TIME_CFG.TIME_INTERVAL_IN_MIN;
 var LAST_IMG_SEND_TIME = "";
 
-
 /*############################################################*/
 /* 		SOCKET CONNECTION - Start establish connection        */
 /*############################################################*/
@@ -239,7 +238,7 @@ const changeCamera = (targetCamLvl, targetCamSlot) => {
                     pin11.writeSync(camInterface[targetCamSlot].pin11);
                     pin12.writeSync(camInterface[targetCamSlot].pin12);
                     console.log(result);
-                    updateCurrentCamState("Changed to [ " + targetCamLvl + " ] camera - [ Slot_" + targetCamSlot + " ]")
+                    updateCurrentCamState("Changed to [ " + targetCamLvl + " ] camera - [ Slot_" + targetCamSlot + " ]");
                     resolve();
                 }
             });

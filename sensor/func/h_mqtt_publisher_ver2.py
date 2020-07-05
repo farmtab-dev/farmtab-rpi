@@ -108,7 +108,7 @@ def on_local_message(l_client, userdata, msg):
 
     mqtt_topic_token = msg.topic.split("/")
     if (mqtt_topic_token[2] == 'req_data'):   # REQUEST SAMPLE DATA
-        temp = READ_SERIAL.decode('utf-8')
+        temp = READ_SERIAL
         print (temp)
         pub_sample_data = { 
             "socket":mqtt_topic_token[-1], 
@@ -117,7 +117,7 @@ def on_local_message(l_client, userdata, msg):
             }
         pub_sample_data = encode_obj_to_json(pub_sample_data)
         l_client.publish("/local/res_data", str(pub_sample_data), 0)
-    elif (mqtt_topic_token[1] == 'calibrate'):   # CALIBRATE
+    elif (mqtt_topic_token[2] == 'calibrate'):   # CALIBRATE
         if (mqtt_topic_token[-1] == C_SOCKET or C_SOCKET==""):
             C_SOCKET = mqtt_topic_token[-1]  # Update the SOCKET ID
             if (incoming_mqtt_msg=="INIT"):  # Handle initial request 
@@ -157,6 +157,7 @@ def pub_calibration_msg(socket, disconnect, c_stat, c_msg):
             "c_stat": c_stat,
             "c_msg": c_msg,
     }
+    print("Publish locally")
     pub_sample_data = encode_obj_to_json(pub_sample_data)
     L_MQTT_CLIENT.publish("/local/res_calibrate", str(pub_sample_data), 0)
 
