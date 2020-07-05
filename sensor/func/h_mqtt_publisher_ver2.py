@@ -117,28 +117,15 @@ def on_local_message(l_client, userdata, msg):
         pub_sample_data = encode_obj_to_json(pub_sample_data)
         l_client.publish("/local/res_data", str(pub_sample_data), 0)
     elif (mqtt_topic_token[2] == 'calibrate'):   # CALIBRATE
-        if (mqtt_topic_token[-1] == C_SOCKET or C_SOCKET==""):
-            C_SOCKET = mqtt_topic_token[-1]  # Update the SOCKET ID
+        if (mqtt_topic_token[-1] == C_SOCKET["sid"] or C_SOCKET["sid"]==""):
+            C_SOCKET["sid"] = mqtt_topic_token[-1]  # Update the SOCKET ID
+            print("Calibrate message ",incoming_mqtt_msg)
             if (incoming_mqtt_msg=="INIT"):  # Handle initial request 
-                pub_sample_data = { 
-                    "socket":mqtt_topic_token[-1], 
-                    "disconnect": False, 
-                    "c_stat": "INIT_CALIBRATION",
-                    "c_msg": "Established connection for calibration",
-                }
-                pub_sample_data = encode_obj_to_json(pub_sample_data)
-                l_client.publish("/local/res_calibrate", str(pub_sample_data), 0)
+                pub_calibration_msg(mqtt_topic_token[-1],False, "INIT_CALIBRATION", "Established connection for calibration")
             else:
                 SER.write(incoming_mqtt_msg) 
         else: 
-            pub_sample_data = { 
-                "socket":mqtt_topic_token[-1], 
-                "disconnect": True, 
-                "c_stat": "DUP_CALIBRATION",
-                "c_msg": "Another instance is calibrating.",
-                }
-            pub_sample_data = encode_obj_to_json(pub_sample_data)
-            l_client.publish("/local/res_calibrate", str(pub_sample_data), 0)
+            pub_calibration_msg (mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
 
 #===============#
 #  MQTT On Log  #
@@ -171,8 +158,8 @@ def readSerialAndPub(client):
     if ("#" in s):
         data = get_store_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, READ_SERIAL["data"])
     
-    if (C_SOCKET!=""):
-        pub_calibration_msg(C_SOCKET, False, "REPLY_CALIBRATION", s)
+    if (C_SOCKET["sid"]!=""):
+        pub_calibration_msg(C_SOCKET["sid"], False, "REPLY_CALIBRATION", s)
 
 #=================#
 #  MAIN FUNCTION  #
@@ -267,7 +254,7 @@ def mqtt_main(comm_with, topic_list):
     # Endless Publisher  #  https://stackoverflow.com/questions/23909292/publish-a-message-every-10-seconds-mqtt
     #--------------------#
     SER = serial.Serial('/dev/ttyACM0', CFP.ARDUINO_BRAUD_RATE)
-    C_SOCKET = ""
+    C_SOCKET = {"sid": ""}
     client.loop_start()
     local_c.loop_start()
     read_serial = ""
