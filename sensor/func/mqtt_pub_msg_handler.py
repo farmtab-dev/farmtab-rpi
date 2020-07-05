@@ -32,7 +32,6 @@ def get_store_sensor_data(client, pub_time_dict, curr_pump_stat, arduino_input):
     return data_obj
 
 def pub_sensor_data(client):
-    #mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], data_str)
     print("HELLO - "+get_curr_datetime())
     #mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], data_str)
     all_data = get_prev_data()

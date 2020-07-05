@@ -5,6 +5,13 @@ Purple='\033[4;35m'      # Purple
 Cyan='\033[4;36m'        # Cyan
 BIWhite='\033[1;97m'      # White
 
+load_latest_env_var(){
+    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+    source /opt/farmtab-rpi/cmd/farmtab-env-serial  
+    source /opt/farmtab-rpi/cmd/farmtab-env-camera  
+    # source /opt/farmtab-rpi/cmd/farmtab-env-cam-rotate 
+}
+
 print_help(){
     printf "Usage:- ${BIWhite}farmtab-cmd${NC} ${Cyan}{TARGET}${NC} ${Purple}{ACTION}${NC} \n"
     if [ $1 -eq 0 -o $1 -eq 1 ]; then
@@ -24,17 +31,23 @@ print_help(){
     fi
     if [ $1 -eq 0 -o $1 -eq 3 ]; then
         printf "\nOTHERS :-\n"
-        printf "    ${Cyan}serial${NC} - Reset serial number for both serial & camera\n"
+        printf "    ${Cyan}serial${NC} - View Raspberry Pi's serial number\n"
         printf "    ${Cyan}mongo${NC}  - Access mongodb as database admin\n"
         printf "    ${Cyan}update${NC} - Update source code from Git Repositories\n"
     fi
 }
 
+
+
+
 if [ "${1}" == 'sensor' ];then 
+    check_curr_user "pi"
+    if [ $? -eq 0 ]; then
+        return
+    fi
     if [ "${2}" == 'start' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
-        source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
-        restart_script "SENSOR" 1  "sensor_script" ${SENSOR_SERIAL}
+        load_latest_env_var
+        restart_script "SENSOR" 1  "sensor_script" ${FARMTAB_SERIAL}
     elif [ "${2}" == 'stop' ];then 
         stop_script "sensor_script"
     elif [ "${2}" == 'delete' ];then 
@@ -47,11 +60,13 @@ if [ "${1}" == 'sensor' ];then
         print_help 1
     fi
 elif [ "${1}" == 'camera' ];then 
+    check_curr_user "pi"
+    if [ $? -eq 0 ]; then
+        return
+    fi
     if [ "${2}" == 'start' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
-        source /opt/farmtab-rpi/cmd/farmtab-env-serial  
-        source /opt/farmtab-rpi/cmd/farmtab-env-camera  
-        restart_script "CAMERA" 2  "camera_script" ${CAMERA_SERIAL}
+        load_latest_env_var
+        restart_script "CAMERA" 2  "camera_script" ${FARMTAB_SERIAL}
     elif [ "${2}" == 'stop' ];then 
         stop_script "camera_script"
     elif [ "${2}" == 'delete' ];then 
@@ -61,27 +76,39 @@ elif [ "${1}" == 'camera' ];then
     elif [ "${2}" == 'code' ];then 
         cd  /opt/farmtab-rpi/camera
     elif [ "${2}" == 'config' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
-        source /opt/farmtab-rpi/cmd/farmtab-env-camera  
+        load_latest_env_var
         setup_camera_config
-    elif [ "${2}" == 'preview' ];then 
-        source /opt/farmtab-rpi/cmd/farmtab-env-camera-rotate  # Run the latest environment variable
-        start_camera_preview
+    # elif [ "${2}" == 'preview' ];then 
+    #     load_latest_env_var
+    #     start_camera_preview
     else 
         print_help 2
     fi
 elif [ "${1}" == 'mongo' ];then 
-    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
+    load_latest_env_var
     mongo -u ${MONGODB_ADM_USERNAME} -p ${MONGODB_ADM_PASS} --authenticationDatabase admin
 elif [ "${1}" == 'serial' ];then 
-    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
-    source /opt/farmtab-rpi/cmd/farmtab-env-serial  
-    change_serial_prog   
+    if [ "${2}" == 'start' ];then 
+        load_latest_env_var
+        start_pi_conn_monitor_script
+    elif [ "${2}" == 'stop' ];then 
+        stop_script "pi_conn_monitor"
+    elif [ "${2}" == 'delete' ];then 
+        delete_script_process "pi_conn_monitor"
+    elif [ "${2}" == 'log' ];then 
+        view_log "pi_conn_monitor"
+    elif [ "${2}" == 'code' ];then 
+        cd  /opt/farmtab-rpi/serial
+    else 
+        load_latest_env_var
+        view_serial_prog 
+    fi
 elif [ "${1}" == 'update' ];then 
-    source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
-    source /opt/farmtab-rpi/cmd/farmtab-env-serial  
-    source /opt/farmtab-rpi/cmd/farmtab-env-camera  
-    source /opt/farmtab-rpi/cmd/farmtab-env-cam-rotate  
+    check_curr_user "root"
+    if [ $? -eq 0 ]; then
+        return
+    fi
+    load_latest_env_var 
     update_software
 else 
     print_help 0

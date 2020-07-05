@@ -14,35 +14,30 @@ NC='\033[0m' # No Color
 FARMTAB_CAM="/opt/farmtab-rpi/camera"
 FARMTAB_SENSOR="/opt/farmtab-rpi/sensor"
 
+check_curr_user(){
+    printf "Current user :- "
+    if whoami | grep -q $1 
+    then
+        echo -e "${BWHITE} $1 ${NC}"
+        return 1
+    else
+        printf "${RED_BLINK} $(whoami) ${NC}"
+        printf "\n  ==> Please execute farmtab-cmd command as ${BGREEN}$1${NC}\n"
+        return 0
+    fi
+}
+
 print_serial_number() {
     printf "\n=============================================\n"
     printf " $1 serial numbers :- "
     printf "\n------------------------\n"
-    if [ $2 -eq 0 ]; then
-        if [ -z "${SENSOR_SERIAL}" ]; then
-            echo -en "${BRED}No sensor serial number${NC}\n"
+        if [ -z "${FARMTAB_SERIAL}" ]; then
+            echo -en "${BRED}No serial number${NC}\n"
         else
-            echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}\n"
+            echo -en " Serial Number (MAC Address) : ${BGWHITE}${FARMTAB_SERIAL}${NC}\n"
         fi
-        if [ -z "${CAMERA_SERIAL}" ]; then
-            echo -en "${BRED}No camera serial number${NC}\n"
-        else
-            echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
-        fi
+    if [ $2 -ne 2 ]; then
         printf "\n=============================================\n"
-    elif [ $2 -eq 1 ]; then 
-        if [ -z "${SENSOR_SERIAL}" ]; then
-            echo -en "${BRED}No sensor serial number${NC}\n"
-        else
-            echo -en " Sensor : ${BGWHITE}${SENSOR_SERIAL}${NC}\n"
-        fi
-        printf "\n=============================================\n"
-    elif [ $2 -eq 2 ]; then
-        if [ -z "${CAMERA_SERIAL}" ]; then
-            echo -en "${BRED}No camera serial number${NC}\n"
-        else
-            echo -en " Camera : ${BGWHITE}${CAMERA_SERIAL}${NC}"
-        fi
     fi
 }
 print_camera_config() {
@@ -53,25 +48,29 @@ print_camera_config() {
     fi
     printf " $1 camera config :- "
     printf "\n------------------------\n"
-    if [ -z "${CAM_POS}" ]; then
-        echo -en "${BRED}No camera configuration${NC}\n"
-    else 
-        echo -en " Camera Position : ${BGWHITE}${CAM_POS}${NC}\n"
-    fi
+    # if [ -z "${CAM_POS}" ]; then
+    #     echo -en "${BRED}No camera configuration${NC}\n"
+    # else 
+    #     echo -en " Camera Position : ${BGWHITE}${CAM_POS}${NC}\n"
+    # fi
     if [ -z "${TOTAL_CAM}" ]; then
         echo -en "${BRED}No ArduCam configuration${NC}\n"
     else 
         echo -en " Total Cameras   : ${BGWHITE}${TOTAL_CAM}${NC}\n"
         echo -en " ArduCam slot :-\n"
-        echo -en "    > Level 1    : ${BGWHITE}${CAM_LVL1}${NC}\n"
+        echo -en "    > Level 1    : ${BGWHITE}${CAM_SLOT_LVL1}${NC}"
+        echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL1}${NC})\n"
         if [ $TOTAL_CAM -ge 2 ]; then
-            echo -en "    > Level 2    : ${BGWHITE}${CAM_LVL2}${NC}\n"
+            echo -en "    > Level 2    : ${BGWHITE}${CAM_SLOT_LVL2}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL2}${NC})\n"
         fi
         if [ $TOTAL_CAM -ge 3 ]; then
-            echo -en "    > Level 3    : ${BGWHITE}${CAM_LVL3}${NC}\n"
+            echo -en "    > Level 3    : ${BGWHITE}${CAM_SLOT_LVL3}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL3}${NC})\n"
         fi
         if [ $TOTAL_CAM -ge 4 ]; then
-            echo -en "    > Level 4    : ${BGWHITE}${CAM_LVL4}${NC}"
+            echo -en "    > Level 4    : ${BGWHITE}${CAM_SLOT_LVL4}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL4}${NC})\n"
         fi
     fi
     printf "\n=============================================\n"
@@ -81,8 +80,8 @@ promptyn () {
     while true; do
         read -p "$1 " yn
         case $yn in
-            [Yy]* ) return 0;;
-            [Nn]* ) return 1;;
+            [Yy]* ) return 1;;
+            [Nn]* ) return 0;;
             * ) printf "${BRED}Press answer [ Y ] or [ N ]${NC}\n";;
         esac
     done
@@ -119,33 +118,34 @@ is_invalid_single_cam(){ # $1 - Camera script, $2 lvl $3 value
     fi
 }
 check_emp_cam_config(){
-    if [ -z "${CAM_POS}" ]; then
-        printf "No camera position!\n"
-        printf "${RED_BLINK}WARNING${NC} $1 cannot be executed without proper camera configuration\n"
-        return 0
-    elif [ -z "${TOTAL_CAM}" ]; then
+    # if [ -z "${CAM_POS}" ]; then
+    #     printf "No camera position!\n"
+    #     printf "${RED_BLINK}WARNING${NC} $1 cannot be executed without proper camera configuration\n"
+    #     return 0
+    # elif [ -z "${TOTAL_CAM}" ]; then
+    if [ -z "${TOTAL_CAM}" ]; then
         printf "Unknown total camera!\n"
         printf "${RED_BLINK}WARNING${NC} $1 cannot be executed without proper camera configuration\n"
         return 0
-    elif [ -z "${CAM_LVL1}" ]; then
+    elif [ -z "${CAM_SLOT_LVL1}" ]; then
         printf "Camera at level 1 has not been configured!\n"
         printf "${RED_BLINK}WARNING${NC} $1 cannot be executed without proper camera configuration\n"
         return 0
     else
         if [ "${TOTAL_CAM}" -ge 2 ]; then
-            is_invalid_single_cam $1 "2" ${CAM_LVL2};
+            is_invalid_single_cam $1 "2" ${CAM_SLOT_LVL2};
             if [ $? -eq 1 ]; then
                 return 0
             fi
         fi
         if [ "${TOTAL_CAM}" -ge 3 ]; then
-            is_invalid_single_cam $1 "3" ${CAM_LVL3};
+            is_invalid_single_cam $1 "3" ${CAM_SLOT_LVL3};
             if [ $? -eq 1 ]; then
                 return 0
             fi
         fi
         if [ "${TOTAL_CAM}" -ge 4 ]; then
-            is_invalid_single_cam $1 "4" ${CAM_LVL4};
+            is_invalid_single_cam $1 "4" ${CAM_SLOT_LVL4};
             if [ $? -eq 1 ]; then
                 return 0
             fi
@@ -156,20 +156,21 @@ check_emp_cam_config(){
 #=====================#
 # FOR CAMERA
 #=====================#
-promptlr () {
-    while true; do
-        read -p ">> Current camera position at left/right side of the shelf :- " lr
-        case $lr in
-            [Ll]* ) 
-                CAM_POS="Left"
-                return 0;;
-            [Rr]* ) 
-                CAM_POS="Right"
-                return 1;;
-            * ) printf "${BRED}Press answer [ L ] or [ R ]${NC}\n";;
-        esac
-    done
-}
+# promptlr () {
+#     while true; do
+#         read -p ">> Current camera position at left/right side of the shelf :- " lr
+#         case $lr in
+#             [Ll]* ) 
+#                 CAM_POS="Left"
+#                 return 0;;
+#             [Rr]* ) 
+#                 CAM_POS="Right"
+#                 return 1;;
+#             * ) printf "${BRED}Press answer [ L ] or [ R ]${NC}\n";;
+#         esac
+#     done
+# }
+
 promptNum () {
     while true; do
         read -p ">> Number of camera connected :- " num
@@ -200,7 +201,21 @@ prompt_and_check_arducam_code () {
     while true; do
         prompt_arducam_code  $1 
         check_duplicate_arducam_slot "$2" $?
+        
         if [ $? -eq 1 ]; then
+            if [ "${2}" == 'lvl1' ];then
+                promptyn "      Rotate the camera ? [Y/N]"
+                export RotateLVL1=$?
+            elif [ "${2}" == 'lvl2' ]; then
+                promptyn "      Rotate the camera ? [Y/N]"
+                export RotateLVL2=$?
+            elif [ "${2}" == 'lvl3' ]; then
+                promptyn "      Rotate the camera ? [Y/N]"
+                export RotateLVL3=$?
+            elif [ "${2}" == 'lvl4' ]; then
+                promptyn "      Rotate the camera ? [Y/N]"
+                export RotateLVL4=$?
+            fi
             return
         else
             printf "${BRED}Duplicate arducam slot. Must be unique for each camera view ${NC}\n"
@@ -294,15 +309,24 @@ check_duplicate_arducam_slot(){
 
 commit_cam_change(){ #$1 - value $2 - lvl
     if [ $1 -eq 0 ]; then
-        echo "export CAM_LVL${2}=A" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+        echo "export CAM_SLOT_LVL${2}=A" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
     elif [ $1 -eq 1 ]; then
-        echo "export CAM_LVL${2}=B" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+        echo "export CAM_SLOT_LVL${2}=B" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
     elif [ $1 -eq 2 ]; then
-        echo "export CAM_LVL${2}=C" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+        echo "export CAM_SLOT_LVL${2}=C" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
     else
-        echo "export CAM_LVL${2}=D" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+        echo "export CAM_SLOT_LVL${2}=D" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
     fi
-    printf "${BGREEN}Committed changes for level $2.${NC}\n"
+    printf "${BGREEN}Committed changes for camera slot at level $2.${NC}\n"
+}
+
+commit_cam_rotate_change(){ #$1 - value $2 - lvl
+    if [ $1 -eq 1 ]; then
+        echo "export CAM_ROTATE_LVL${2}=YES" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+    else
+        echo "export CAM_ROTATE_LVL${2}=NO" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+    fi
+    printf "${BGREEN}Committed changes for camera rotation at level $2.${NC}\n"
 }
 
 # Left A, B, C / right D, E, F
@@ -310,8 +334,8 @@ commit_cam_change(){ #$1 - value $2 - lvl
 setup_camera_config(){
     clear
     print_camera_config "Current" 0
-    echo -en "\n${BGWHITE}Camera position :- ${NC} ${RWhite}[ INFO! : Input L/R ]${NC}\n"
-    promptlr 
+    # echo -en "\n${BGWHITE}Camera position :- ${NC} ${RWhite}[ INFO! : Input L/R ]${NC}\n"
+    # promptlr 
     echo -en "\n${BGWHITE}Total camera :- ${NC} ${RWhite}[ INFO! : Input 1 ~ 4 ]${NC}\n"
     promptNum 
     #if promptyn "Are you using ArduCam? [Y/N]"; then
@@ -333,19 +357,23 @@ setup_camera_config(){
         else
             unset LVL4
         fi
-        echo "export CAM_POS=${CAM_POS}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
-        printf "\n${BGREEN}Committed changes for camera position.${NC}"
-        echo "export TOTAL_CAM=${TOTAL_CAM}" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
+        # echo "export CAM_POS=${CAM_POS}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
+        # printf "\n${BGREEN}Committed changes for camera position.${NC}"
+        echo "export TOTAL_CAM=${TOTAL_CAM}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
         printf "\n${BGREEN}Committed changes for total camera.${NC}\n"
         commit_cam_change $LVL1 "1"
+        commit_cam_rotate_change $RotateLVL1 "1"
         if [ $TOTAL_CAM -ge 2 ]; then
             commit_cam_change $LVL2 "2"
+            commit_cam_rotate_change $RotateLVL2 "2"
         fi
         if [ $TOTAL_CAM -ge 3 ]; then
             commit_cam_change $LVL3 "3"
+            commit_cam_rotate_change $RotateLVL3 "3"
         fi
         if [ $TOTAL_CAM -ge 4 ]; then
             commit_cam_change $LVL4 "4"
+            commit_cam_rotate_change $RotateLVL4 "4"
         fi
         source /opt/farmtab-rpi/cmd/farmtab-env-camera
         print_camera_config "Latest" 0
@@ -361,53 +389,61 @@ start_camera_preview(){
 }
 
 #------------------------------#
-# Change Serial Number
+# View Serial Number  
 #------------------------------#
-change_serial_prog(){
+view_serial_prog(){
     clear
     source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
     print_serial_number "Current" 0
-    printf "${BYELLOW}Press [ Enter ] without input to maintain the same serial number.${NC}\n"
-    prompt_serial_input " >> Enter new serial number for sensor: " temp_sn
-    prompt_serial_input " >> Enter new serial number for camera: " temp_cm
-    need_chg=0
-    if [ -z "$temp_sn" ]; then
-        echo "No changes for sensor serial"
-        temp_sn=${SENSOR_SERIAL}
-    else 
-        printf "Sensor serial : ${BRED}${SENSOR_SERIAL}${NC}  ==> ${BGREEN}${temp_sn}${NC}\n"
-        need_chg=1
-    fi
-    if [ -z "$temp_cm" ]; then
-        echo "No changes for camera serial"
-        temp_cm=${CAMERA_SERIAL}
-    else 
-        printf "Camera serial : ${BRED}${CAMERA_SERIAL}${NC}  ==> ${BGREEN}${temp_cm}${NC}\n"
-        need_chg=1
-    fi
-    if [ $need_chg -eq 1 ]; then 
-        echo "export SENSOR_SERIAL=${temp_sn}" > /opt/farmtab-rpi/cmd/farmtab-env-serial
-        echo "export CAMERA_SERIAL=${temp_cm}" >> /opt/farmtab-rpi/cmd/farmtab-env-serial
-        printf "${BGREEN}Committed changes.${NC}"
-        source /opt/farmtab-rpi/cmd/farmtab-env-serial 
-        print_serial_number "Latest" 0
-        printf "${BRED}Remember to run command to restart script${NC}\n"
-    else
-        printf "${BGREEN}No changes${NC}\n"
-    fi
-
-    check_emp_serial  "Sensor serial number" " Sensor script" ${SENSOR_SERIAL}
-    check_emp_serial  "Camera serial number" "Camera script" ${CAMERA_SERIAL}
 }
+#------------------------------#
+# Change Serial Number  : ABANDON
+#------------------------------#
+# change_serial_prog(){
+#     clear
+#     source /opt/farmtab-rpi/cmd/farmtab-env-serial  # Run the latest environment variable
+#     print_serial_number "Current" 0
+#     printf "${BYELLOW}Press [ Enter ] without input to maintain the same serial number.${NC}\n"
+#     prompt_serial_input " >> Enter new serial number for sensor: " temp_sn
+#     prompt_serial_input " >> Enter new serial number for camera: " temp_cm
+#     need_chg=0
+#     if [ -z "$temp_sn" ]; then
+#         echo "No changes for sensor serial"
+#         temp_sn=${SENSOR_SERIAL}
+#     else 
+#         printf "Sensor serial : ${BRED}${SENSOR_SERIAL}${NC}  ==> ${BGREEN}${temp_sn}${NC}\n"
+#         need_chg=1
+#     fi
+#     if [ -z "$temp_cm" ]; then
+#         echo "No changes for camera serial"
+#         temp_cm=${CAMERA_SERIAL}
+#     else 
+#         printf "Camera serial : ${BRED}${CAMERA_SERIAL}${NC}  ==> ${BGREEN}${temp_cm}${NC}\n"
+#         need_chg=1
+#     fi
+#     if [ $need_chg -eq 1 ]; then 
+#         echo "export SENSOR_SERIAL=${temp_sn}" > /opt/farmtab-rpi/cmd/farmtab-env-serial
+#         echo "export CAMERA_SERIAL=${temp_cm}" >> /opt/farmtab-rpi/cmd/farmtab-env-serial
+#         printf "${BGREEN}Committed changes.${NC}"
+#         source /opt/farmtab-rpi/cmd/farmtab-env-serial 
+#         print_serial_number "Latest" 0
+#         printf "${BRED}Remember to run command to restart script${NC}\n"
+#     else
+#         printf "${BGREEN}No changes${NC}\n"
+#     fi
+
+#     check_emp_serial  "Sensor serial number" " Sensor script" ${SENSOR_SERIAL}
+#     check_emp_serial  "Camera serial number" "Camera script" ${CAMERA_SERIAL}
+# }
 
 #------------------------------#  # https://github.com/Unitech/pm2/issues/325#issuecomment-281580956
 #  Start SENSOR/CAMERA Script  #
 #------------------------------#
-restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${SENSOR_SERIAL/CAMERA_SERIAL} 
+restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${FARMTAB_SERIAL} 
     clear
     print_serial_number "Current" ${2}
     if check_emp_serial  "${1} serial number" " ${1} script" ${4}; then
-        printf "${BRED}Please run ${NC} ${BGWHITE}farmtab-cmd set_serial${NC} ${BRED}command to set serial number${NC}\n"
+        printf "${BRED}Please run ${NC} ${BGWHITE}installation file${NC} ${BRED}to set serial number${NC}\n"
         return
     fi
     if [ ${1} == "CAMERA" ]; then
@@ -418,7 +454,9 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${SENSOR_SERIAL/
             return
         fi
     fi
-    if promptyn "Do you want to start ${1} script with this setting? [Y/N]"; then
+    promptyn "Do you want to start ${1} script with this setting? [Y/N]"
+    if [ $? -eq 1 ]; then
+        start_pi_conn_monitor_script
         APPNAME=$3
         pm2 describe ${APPNAME} > /dev/null
         RUNNING=$?
@@ -441,6 +479,23 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${SENSOR_SERIAL/
     else
         printf "${BGREEN}No changes${NC}\n"
     fi   
+}
+
+start_pi_conn_monitor_script(){
+    APPNAME="pi_conn_monitor"
+    pm2 describe ${APPNAME} > /dev/null
+    RUNNING=$?
+
+    if [ "${RUNNING}" -ne 0 ]; then
+        printf "${BYELLOW}Starting Pi connection monitoring script${NC}\n"
+        pm2 start  /opt/farmtab-rpi/serial/start_pi_conn_monitoring.js --name=${APPNAME} --silent
+        printf "${BYELLOW}Enable Pi connection monitoring script on startup${NC}\n"
+        pm2 save --silent
+    else
+        printf "${BYELLOW}Restarting Pi connection monitoring script${NC}\n"
+        pm2 restart ${APPNAME} --silent --update-env
+    fi;
+    printf "${BGREEN}Done${NC}\n" 
 }
 
 

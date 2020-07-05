@@ -7,10 +7,12 @@ CURR_PUMP_STAT = {
     "WATER":False,
     "FER":False
 }
+# sudo nano /boot/config.txt https://www.raspberrypi.org/documentation/configuration/config-txt/gpio.md
+    # gpio=5,6,22=op,dl
 PUMP_PIN = {
-    'pinA': 17,
-    'pinB': 22,
-    'pinW': 5
+    'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
+    'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
+    'pinB': 6,     # 22 (WiringPin) - B fertilizer 
 }
 
 # Threshold 

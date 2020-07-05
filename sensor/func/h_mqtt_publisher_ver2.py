@@ -35,7 +35,7 @@ def on_connect(client, userdata, flags, rc):
 #======================#
 #http://www.steves-internet-guide.com/loop-python-mqtt-client/
 def on_disconnect(client, userdata,rc=0):
-    logging.debug("Disconnected result code "+str(rc))
+    print("Disconnected result code "+str(rc))
     client.loop_stop()
 
 #===================#
@@ -120,20 +120,19 @@ def mqtt_main(comm_with, topic_list):
                 client.username_pw_set(CPS.MQTT_USERNAME, password=CPS.MQTT_PASSWORD)
         
 
-    #---------------------------#
-    # Attach Callback Function  #
-    #---------------------------#
-    client.on_connect = on_connect  
-    client.on_message = on_message
-    client.on_publish = on_publish
+    #----------------------------------#
+    # Attach Callback Function - CLOUD #
+    #----------------------------------#
+    client.on_connect   = on_connect  
+    client.on_message   = on_message
+    client.on_publish   = on_publish
     client.on_subscribe = on_subscribe
     # client.on_log = on_log
 
     #----------------------------#
     # Establish MQTT Connection  #
     #----------------------------#
-    if (CPS.MQTT_SERVER_TYPE == "cloud"):
-        client.connect(CPS.MQTT_CLOUD_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
+    client.connect(CPS.MQTT_CLOUD_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
     else:
         client.connect(CPS.MQTT_LOCAL_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
 
@@ -167,9 +166,7 @@ def mqtt_main(comm_with, topic_list):
             need_resync = sync_cloud_thres_info(SEN_SERIAL, THRESHOLD_DICT) 
         else:
             schedule.run_pending()
-        #    read_serial=ser.readline()   
-            read_serial="PH@5#TEMP@25#EC@20#ORP@20"  
-            
+                        
             #data = get_pub_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, read_serial)
             data = get_store_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, read_serial)
             check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data)

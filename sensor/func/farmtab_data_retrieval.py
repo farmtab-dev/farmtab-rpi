@@ -2,16 +2,29 @@
 import os
 
 from func.h_rand_func import get_rand_num_between
-from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format
+from func.h_datetime_func import get_curr_datetime_in_utc, get_curr_datetime, get_curr_datetime_without_format
 from func.h_conversion_func import encode_obj_to_json
 from func.h_pymongo_func import find_all_by_query
 import datetime
 #======================#
 #  GET SENSOR READING  #
 #======================#
+def prepare_pub_sensor_data(sensor_data):
+    res = {
+        "data_datetime": get_curr_datetime_in_utc(),
+        "temp": sensor_data["temp"],
+        "ph": sensor_data["ph"],
+        "ec": sensor_data["ec"],  
+        "orp": sensor_data["orp"],
+        "tds": sensor_data["tds"],
+        "wlvl1": sensor_data["wlvl1"],
+        "wlvl2": sensor_data["wlvl2"] 
+    }
+    return encode_obj_to_json(res)
+
 def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
-    #data_tokens = arduino_input.decode('utf-8').split("#")
-    data_tokens = arduino_input.split("#")
+    data_tokens = arduino_input.decode('utf-8').split("#")
+    # data_tokens = arduino_input.split("#")   #For Debugging - Dummy string
 
     res = {
         "data_datetime": get_curr_datetime(),
@@ -23,7 +36,7 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
         "ph": -1,
         "ec": -1,  # Temporary reading
         "orp": -1,
-        "co2": -1,
+        "tds": -1,
         "wlvl1": -1,
         "wlvl2": -1
     }
@@ -40,7 +53,8 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
                 res["ec"] = float(d[1])
             elif (d[0]=="ORP"):
                 res["orp"] = float(d[1])
-                res["co2"] = float(d[1])
+            elif (d[0]=="TDS"):
+                res["tds"] = float(d[1])
             elif (d[0]=="WLVL1"):
                 res["wlvl1"] = float(d[1])
             elif (d[0]=="WLVL2"):

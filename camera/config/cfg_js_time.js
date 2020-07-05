@@ -11,9 +11,9 @@ var TIME_VALUE = {
 };
 
 //  ADJUST HERE - Time interval for better result
-config.TIME_INTERVAL = {
-    // disconnect: 60, // In minutes
-    // img_process: 180, // In minutes
+config.TIME_INTERVAL_IN_MIN = {
+    disconnect: 60, // In minutes
+    img_process: 180, // In minutes
     prev_motion: 5, // In minutes
     detect_motion: 1, // In minutes
 }
@@ -30,7 +30,8 @@ config.sleep = (milliseconds) => {
 
 config.CRON_JOB_INTERVAL = process.env.INTERVAL_CRON || TIME_VALUE.hour * 3;
 config.CHANGE_CAM_INTERVAL = process.env.INTERVAL_CHG_CAM || TIME_VALUE.sec * 10;
-config.CAPTURE_IMG_INTERVAL = process.env.INTERVAL_CAP_IMG || TIME_VALUE.sec * 1;
+config.UPDATE_CAM_FEED = process.env.INTERVAL_CAP_IMG || TIME_VALUE.sec * 5;
+config.SEND_IMG_HOUR = [6, 9, 12, 15];
 
 /*******************
  *  EXPORT CONFIG

@@ -1,0 +1,17 @@
+{
+  "name": "serial",
+  "version": "1.0.0",
+  "description": "Script to provide connection status as socket client ",
+  "main": "start_pi_conn.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mqtt": "^4.1.0",
+    "pm2": "^4.4.0",
+    "simple-node-logger": "^18.12.24",
+    "socket.io-client": "^2.3.0"
+  }
+}

@@ -17,6 +17,7 @@ import cv2  # Dependencies Issue : https://github.com/amymcgovern/pyparrot/issue
 # sudo apt-get install libqtgui4
 # sudo apt-get install python3-pyqt5
 # sudo apt install libqt4-test
+# sudo apt-get install libatlas-base-dev libjasper-dev libqtgui4 python3-pyqt5 libqt4-test
 import sys
 import os
 
