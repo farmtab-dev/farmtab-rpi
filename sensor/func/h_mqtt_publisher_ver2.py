@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when the client receives a CONNACK response from the server.
 def on_local_connect(l_client, userdata, flags, rc):
     print("\nSuccessful MQTT local connection with result code "+str(rc))
-    L_MQTT_CLIENT = l_client
+    
     l_client.subscribe("/local/req_data/#")    # For sample data request
     l_client.subscribe("/local/calibrate/#")   # For calibrate sensor
 
@@ -117,9 +117,10 @@ def on_local_message(l_client, userdata, msg):
         pub_sample_data = encode_obj_to_json(pub_sample_data)
         l_client.publish("/local/res_data", str(pub_sample_data), 0)
     elif (mqtt_topic_token[2] == 'calibrate'):   # CALIBRATE
+        print("Calibrate message ",incoming_mqtt_msg)
+        print(mqtt_topic_token[-1] == C_SOCKET["sid"] or C_SOCKET["sid"]=="")
         if (mqtt_topic_token[-1] == C_SOCKET["sid"] or C_SOCKET["sid"]==""):
             C_SOCKET["sid"] = mqtt_topic_token[-1]  # Update the SOCKET ID
-            print("Calibrate message ",incoming_mqtt_msg)
             if (incoming_mqtt_msg=="INIT"):  # Handle initial request 
                 pub_calibration_msg(mqtt_topic_token[-1],False, "INIT_CALIBRATION", "Established connection for calibration")
             else:
@@ -145,7 +146,7 @@ def pub_calibration_msg(socket, disconnect, c_stat, c_msg):
     }
     print("Publish locally")
     pub_sample_data = encode_obj_to_json(pub_sample_data)
-    L_MQTT_CLIENT.publish("/local/res_calibrate", str(pub_sample_data), 0)
+    L_MQTT_CLIENT["c"].publish("/local/res_calibrate", str(pub_sample_data), 0)
 
 def readSerialAndPub(client):
     read_serial=SER.readline()   
@@ -202,7 +203,7 @@ def mqtt_main(comm_with, topic_list):
 
     client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"-"+str(comm_with))
     local_c = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"- local")
-
+    L_MQTT_CLIENT = {"c": l_client}
     #-----------------------------#
     # MQTT Authentication Method  #
     #-----------------------------#
