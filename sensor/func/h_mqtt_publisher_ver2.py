@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when the client receives a CONNACK response from the server.
 def on_local_connect(l_client, userdata, flags, rc):
     print("\nSuccessful MQTT local connection with result code "+str(rc))
-    L_MQTT_CLIENT = {"c": l_client}
+
     l_client.subscribe("/local/req_data/#")    # For sample data request
     l_client.subscribe("/local/calibrate/#")   # For calibrate sensor
 
@@ -122,11 +122,11 @@ def on_local_message(l_client, userdata, msg):
         if (mqtt_topic_token[-1] == C_SOCKET["sid"] or C_SOCKET["sid"]==""):
             C_SOCKET["sid"] = mqtt_topic_token[-1]  # Update the SOCKET ID
             if (incoming_mqtt_msg=="INIT"):  # Handle initial request 
-                pub_calibration_msg(mqtt_topic_token[-1],False, "INIT_CALIBRATION", "Established connection for calibration")
+                pub_calibration_msg(l_client,mqtt_topic_token[-1],False, "INIT_CALIBRATION", "Established connection for calibration")
             else:
                 SER.write(incoming_mqtt_msg) 
         else: 
-            pub_calibration_msg (mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
+            pub_calibration_msg(l_client,mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
 
 #===============#
 #  MQTT On Log  #
@@ -137,7 +137,7 @@ def on_log(client, userdata, level, buf):
 #===============#
 #  READ SERIAL  #
 #===============#
-def pub_calibration_msg(socket, disconnect, c_stat, c_msg):
+def pub_calibration_msg(l_client,socket, disconnect, c_stat, c_msg):
     pub_sample_data = { 
             "socket":socket, 
             "disconnect": disconnect, 
@@ -146,9 +146,9 @@ def pub_calibration_msg(socket, disconnect, c_stat, c_msg):
     }
     print("Publish locally")
     pub_sample_data = encode_obj_to_json(pub_sample_data)
-    L_MQTT_CLIENT["c"].publish("/local/res_calibrate", str(pub_sample_data), 0)
+    l_client.publish("/local/res_calibrate", str(pub_sample_data), 0)
 
-def readSerialAndPub(client):
+def readSerialAndPub(client, l_client):
     read_serial=SER.readline()   
     READ_SERIAL["data"] = read_serial
     print("ARDUINO ==> ", READ_SERIAL["data"])
@@ -160,7 +160,7 @@ def readSerialAndPub(client):
         data = get_store_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, READ_SERIAL["data"])
     
     if (C_SOCKET["sid"]!=""):
-        pub_calibration_msg(C_SOCKET["sid"], False, "REPLY_CALIBRATION", s)
+        pub_calibration_msg(l_client,C_SOCKET["sid"], False, "REPLY_CALIBRATION", s)
 
 #=================#
 #  MAIN FUNCTION  #
@@ -181,7 +181,6 @@ def mqtt_main(comm_with, topic_list):
     global READ_SERIAL
     global SER
     global C_SOCKET
-    global L_MQTT_CLIENT
 
     SUBSCRIBE_TOPIC = topic_list
     COMMUNICATE_WITH = comm_with
@@ -202,7 +201,7 @@ def mqtt_main(comm_with, topic_list):
     print("Topic to subscribe : " + str(len(SUBSCRIBE_TOPIC)))
 
     client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"-"+str(comm_with))
-    local_c = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"- local")
+    l_client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"- local")
 
     #-----------------------------#
     # MQTT Authentication Method  #
@@ -223,16 +222,16 @@ def mqtt_main(comm_with, topic_list):
     #----------------------------------#
     # Attach Callback Function - LOCAL #
     #----------------------------------#
-    local_c.on_connect   = on_local_connect  
-    local_c.on_message   = on_local_message
-    local_c.on_publish   = on_local_publish
-    local_c.on_subscribe = on_local_subscribe
+    l_client.on_connect   = on_local_connect  
+    l_client.on_message   = on_local_message
+    l_client.on_publish   = on_local_publish
+    l_client.on_subscribe = on_local_subscribe
 
     #----------------------------#
     # Establish MQTT Connection  #
     #----------------------------#
     client.connect(CPS.MQTT_CLOUD_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
-    local_c.connect(CPS.MQTT_LOCAL_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
+    l_client.connect(CPS.MQTT_LOCAL_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
     # if (CPS.MQTT_SERVER_TYPE == "cloud"):
     #     client.connect(CPS.MQTT_CLOUD_SERVER, CPS.MQTT_PORT, CPS.MQTT_KEEPALIVE)
     # else:
@@ -257,11 +256,11 @@ def mqtt_main(comm_with, topic_list):
     SER = serial.Serial('/dev/ttyACM0', CFP.ARDUINO_BRAUD_RATE)
     C_SOCKET = {"sid": ""}
     client.loop_start()
-    local_c.loop_start()
+    l_client.loop_start()
     read_serial = ""
     READ_SERIAL = { "data":read_serial }
     while True:
-        readSerialAndPub(client)
+        readSerialAndPub(client, l_client)
         schedule.run_pending()
         #data = get_pub_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, read_serial)
         
