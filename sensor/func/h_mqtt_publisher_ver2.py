@@ -108,8 +108,9 @@ def on_local_message(l_client, userdata, msg):
 
     mqtt_topic_token = msg.topic.split("/")
     if (mqtt_topic_token[2] == 'req_data'):   # REQUEST SAMPLE DATA
-        temp = READ_SERIAL
-        print (temp)
+        temp = READ_SERIAL.data
+        print("hello")
+        print (temp.decode('utf-8'))
         pub_sample_data = { 
             "socket":mqtt_topic_token[-1], 
             "disconnect":incoming_mqtt_msg, 
@@ -163,14 +164,14 @@ def pub_calibration_msg(socket, disconnect, c_stat, c_msg):
 
 def readSerialAndPub(client):
     read_serial=SER.readline()   
-    READ_SERIAL = read_serial
-    print("ARDUINO ==> ", READ_SERIAL)
+    READ_SERIAL.data = read_serial
+    print("ARDUINO ==> ", READ_SERIAL.data)
     #read_serial="PH@5#TEMP@25#EC@20"  
     check_pump(client, CTRL_TIME_DICT, CURR_PUMP_DICT)
     # Check whether it is valid data before proceed to PROCESS + STORE
-    s = READ_SERIAL.decode('utf-8')
+    s = READ_SERIAL.data.decode('utf-8')
     if ("#" in s):
-        data = get_store_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, READ_SERIAL)
+        data = get_store_sensor_data(client, PUB_TIME_DICT, CURR_PUMP_DICT, READ_SERIAL.data)
     
     if (C_SOCKET!=""):
         pub_calibration_msg(C_SOCKET, False, "REPLY_CALIBRATION", s)
@@ -272,7 +273,7 @@ def mqtt_main(comm_with, topic_list):
     client.loop_start()
     local_c.loop_start()
     read_serial = ""
-    READ_SERIAL = read_serial
+    READ_SERIAL.data = read_serial
     while True:
         readSerialAndPub(client)
         schedule.run_pending()
