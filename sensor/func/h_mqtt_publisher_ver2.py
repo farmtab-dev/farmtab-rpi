@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when the client receives a CONNACK response from the server.
 def on_local_connect(l_client, userdata, flags, rc):
     print("\nSuccessful MQTT local connection with result code "+str(rc))
-    
+    L_MQTT_CLIENT = {"c": l_client}
     l_client.subscribe("/local/req_data/#")    # For sample data request
     l_client.subscribe("/local/calibrate/#")   # For calibrate sensor
 
@@ -203,7 +203,7 @@ def mqtt_main(comm_with, topic_list):
 
     client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"-"+str(comm_with))
     local_c = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"- local")
-    L_MQTT_CLIENT = {"c": l_client}
+
     #-----------------------------#
     # MQTT Authentication Method  #
     #-----------------------------#
