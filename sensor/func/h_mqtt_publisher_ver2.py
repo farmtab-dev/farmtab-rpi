@@ -108,9 +108,7 @@ def on_local_message(l_client, userdata, msg):
 
     mqtt_topic_token = msg.topic.split("/")
     if (mqtt_topic_token[2] == 'req_data'):   # REQUEST SAMPLE DATA
-        temp = READ_SERIAL["data"]
-        print("hello")
-        print (temp.decode('utf-8'))
+        temp = READ_SERIAL["data"].decode('utf-8')
         pub_sample_data = { 
             "socket":mqtt_topic_token[-1], 
             "disconnect":incoming_mqtt_msg, 
