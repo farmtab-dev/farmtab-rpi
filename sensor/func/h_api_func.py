@@ -32,7 +32,7 @@ def _url(path):
 #         update_thresholds(THRESHOLD_DICT, threshold)
 def sync_cloud_thres_info(serial, thres_dict):
     shelf_id = get_shelf_id(serial)
-    if (shelf_id==None):  # Cannot get Shelf ID - Means not assigned to shelf yet
+    if (shelf_id is None):  # Cannot get Shelf ID - Means not assigned to shelf yet
         return True
     else:  
         threshold = get_threshold(shelf_id)

@@ -19,7 +19,7 @@ def update_thresholds(thres_obj, new_thres):
 #==========================#
 #  Check THRESHOLD  #
 #==========================#
-def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
+def check_pump(client, ctrl_time_dict, curr_pump_dict):
     # Either Water / Fertilizer is activated
     if (curr_pump_dict["WATER"] or curr_pump_dict["FER"]):
         # Check for activation duration
@@ -28,26 +28,30 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
         if (time_elapse < ctrl_time_dict["ctrl_interval"]):
             print (ctrl_time_dict["ctrl_pump"] + " PUMP ON for " + str(time_elapse))
             return 
-        print (curr_pump_dict)
-        
+        print ("\CHECK_PUMP ==> " + curr_pump_dict)
+       
         control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "OFF")
         curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = False
         ctrl_time_dict["ctrl_pump"] = None
         ctrl_time_dict["last_ctrl"] = None
- 
 
+
+def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
+    
     print ("\nCHECK_THRES ==> PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
            "ORP:" + str(data["orp"]) + "("+str(thres_dict["thres_orp_min"]) +"-"+ str(thres_dict["thres_orp_max"])+")")
-    if (ctrl_time_dict["last_check"] is not None):
-        # Check for activation duration
-        curr_time = get_curr_datetime()
-        time_elapse = get_time_difference_in_sec(ctrl_time_dict["last_check"], curr_time)
-        if (time_elapse < ctrl_time_dict["check_interval"]):
-            print ("    Delay checks for " + str(time_elapse))
-            return 
+    # if (ctrl_time_dict["last_check"] is not None):
+    #     # Check for last check duration
+    #     curr_time = get_curr_datetime()
+    #     time_elapse = get_time_difference_in_sec(ctrl_time_dict["last_check"], curr_time)
+    #     if (time_elapse < ctrl_time_dict["check_interval"]):
+    #         print ("    Delay checks for " + str(time_elapse))
+    #         return 
 
-    ctrl_time_dict["last_check"] = get_curr_datetime()
+    # ctrl_time_dict["last_check"] = get_curr_datetime()
     if (data["ph"] <= thres_dict["thres_ph_min"] and data["orp"] <= thres_dict["thres_orp_min"] ):
+        # if (data["wlvl1"]):
+        #     return
         ctrl_time_dict["last_ctrl"] = get_curr_datetime()
         ctrl_time_dict["ctrl_pump"] = "FER"
         curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = True
@@ -59,5 +63,5 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
         curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = True
         control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "ON")
             
-    #mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], str(data))
+    
     
