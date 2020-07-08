@@ -45,6 +45,8 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
     for t in data_tokens:
         if ("@" in t):
             d = t.split("@")
+            if (d[1]=="inf"):
+                continue
             if (d[0]=="TEMP"):
                 res["temp"] = float(d[1])
             elif (d[0]=="PH"):
@@ -60,6 +62,7 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
             elif (d[0]=="WLVL2"):
                 res["wlvl2"] = float(d[1])
 
+    print(res)
     return res, encode_obj_to_json(res)
 
 #https://stackoverflow.com/questions/37474784/query-datetime-with-pymongo

@@ -1,7 +1,7 @@
 ARDUINO_BRAUD_RATE = 9600         #BRAUD RATE for arduino Code
 PUB_DATA_INTERVAL_IN_SEC = 3600000         # Waiting time before next publish
 STORE_DATA_INTERVAL_IN_SEC = 300         # Waiting time before next storage
-CTRL_INTERVAL_IN_SEC = 50         # Activation time duration
+CTRL_INTERVAL_IN_SEC =  10        # Activation time duration
 CHECK_INTERVAL_IN_SEC = 100       # Delay to check threshold 
 CURR_PUMP_STAT = {
     "WATER":False,
