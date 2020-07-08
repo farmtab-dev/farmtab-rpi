@@ -529,3 +529,50 @@ update_software(){
     printf "${BGREEN}Done${NC}\n"
     cd $temp_pwd
 }
+
+# https://stackoverflow.com/questions/8903239/how-to-calculate-time-elapsed-in-bash-script
+test_usb_pump(){
+    sudo echo '1-1' > '/sys/bus/usb/drivers/usb/unbind'
+    SECONDS=0
+    printf "${BYELLOW}ON USB PUMP...${NC}\n"
+    sudo echo '1-1' > '/sys/bus/usb/drivers/usb/bind'
+    sleep $1
+    sudo echo '1-1' > '/sys/bus/usb/drivers/usb/unbind'
+    printf "${BYELLOW}OFF USB PUMP...${NC}\n"
+    # do some work
+
+    duration=$SECONDS
+    printf "Result :- ${BGREEN}$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed.${NC}\n"
+}
+
+test_pump(){
+    gpio mode 3 out  # Water
+    gpio mode 21 out # A fertilizer
+    gpio mode 22 out # B fertilizer
+    SECONDS=0
+    if [ $1 -eq 1 ]; then 
+        printf "${BYELLOW}ON [ WATER ] PUMP...${NC}\n"
+        gpio write 3 1
+    elif [ $1 -eq 2 ]; then 
+        printf "${BYELLOW}ON [ A fertilizer ] PUMP...${NC}\n"
+        gpio write 21 1
+    elif [ $1 -eq 3 ]; then 
+        printf "${BYELLOW}ON [ B fertilizer ] PUMP...${NC}\n"
+        gpio write 22 1
+    fi
+
+    sleep $2
+    if [ $1 -eq 1 ]; then 
+        printf "${BYELLOW}OFF [ WATER ] PUMP...${NC}\n"
+        gpio write 3 0
+    elif [ $1 -eq 2 ]; then 
+        printf "${BYELLOW}OFF [ A fertilizer ] PUMP...${NC}\n"
+        gpio write 21 0
+    elif [ $1 -eq 3 ]; then 
+        printf "${BYELLOW}OFF [ B fertilizer ] PUMP...${NC}\n"
+        gpio write 22 0
+    fi
+
+    duration=$SECONDS
+    printf "Result :- ${BGREEN}$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed.${NC}\n"
+}
