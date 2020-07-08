@@ -11,7 +11,7 @@ import datetime
 #======================#
 def prepare_pub_sensor_data(sensor_data):
     res = {
-        "data_datetime": get_curr_datetime_in_utc(),
+        "data_datetime": get_curr_datetime(),
         "temp": sensor_data["temp"],
         "ph": sensor_data["ph"],
         "ec": sensor_data["ec"],  
