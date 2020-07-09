@@ -155,7 +155,7 @@ def readSerialAndPub(client, l_client):
     READ_SERIAL["data"] = read_serial
     print("ARDUINO ==> ", READ_SERIAL["data"])
     #read_serial="PH@5#TEMP@25#EC@20"  
-    check_pump(client, CTRL_TIME_DICT, CURR_PUMP_DICT)
+    # check_pump(client, CTRL_TIME_DICT, CURR_PUMP_DICT) 
     # Check whether it is valid data before proceed to PROCESS + STORE
     s = READ_SERIAL["data"].decode('utf-8')
     if ("#" in s):
