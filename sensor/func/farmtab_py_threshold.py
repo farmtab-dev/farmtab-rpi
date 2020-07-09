@@ -28,7 +28,7 @@ def check_pump(client, ctrl_time_dict, curr_pump_dict):
         if (time_elapse < ctrl_time_dict["ctrl_interval"]):
             print (ctrl_time_dict["ctrl_pump"] + " PUMP ON for " + str(time_elapse))
             return 
-        print ("\nCHECK_PUMP ==> " + curr_pump_dict)
+        print ("\nCHECK_PUMP ==> " + str(curr_pump_dict))
        
         control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "OFF")
         curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = False
