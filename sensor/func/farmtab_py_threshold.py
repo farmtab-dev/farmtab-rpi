@@ -25,7 +25,7 @@ def check_pump(client, ctrl_time_dict, curr_pump_dict):
         # Check for activation duration
         curr_time = get_curr_datetime()
         time_elapse = get_time_difference_in_sec(ctrl_time_dict["last_ctrl"], curr_time)
-        if (time_elapse < ctrl_time_dict["ctrl_interval"]):
+        if (time_elapse <= ctrl_time_dict["ctrl_interval"]):
             print (ctrl_time_dict["ctrl_pump"] + " PUMP ON for " + str(time_elapse))
             return 
         print ("\nCHECK_PUMP ==> " + str(curr_pump_dict))
