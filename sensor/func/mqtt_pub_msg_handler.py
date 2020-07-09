@@ -6,7 +6,7 @@ from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port,
 from func.h_datetime_func import get_curr_datetime,get_curr_datetime_without_format, get_time_difference_in_sec
 from func.h_pymongo_func import insert_item
 from func.h_api_func import resync_cloud_thres_info
-from func.farmtab_py_threshold import  check_threshold
+from func.farmtab_py_threshold import  check_thresholdV2
 from func.h_conversion_func import encode_obj_to_json
 import os
 import asyncio
@@ -57,7 +57,7 @@ def check_thres_pub_sensor_data(client,CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_
     data_res['wlvl1']=all_data[-1]["wlvl1"]
     data_res['wlvl2']=all_data[-1]["wlvl2"]
     print ("SENSOR DATA : ", data_res)
-    check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
+    check_thresholdV2(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
     print(CTRL_TIME_DICT,"\n")
     print(CURR_PUMP_DICT,"\n")
     print(THRESHOLD_DICT)
