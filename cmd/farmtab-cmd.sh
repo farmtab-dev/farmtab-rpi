@@ -103,6 +103,8 @@ elif [ "${1}" == 'serial' ];then
         load_latest_env_var
         view_serial_prog 
     fi
+elif [ "${1}" == 'pump' ];then 
+    test_pump  $2 $3
 elif [ "${1}" == 'update' ];then 
     check_curr_user "root"
     if [ $? -eq 0 ]; then
