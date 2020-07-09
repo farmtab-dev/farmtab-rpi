@@ -35,7 +35,7 @@ def check_pump(client, ctrl_time_dict, curr_pump_dict):
         ctrl_time_dict["ctrl_pump"] = None
         ctrl_time_dict["last_ctrl"] = None
     else:
-        print ("NO PUMP CHECK ==> " + curr_pump_dict)
+        print ("NO PUMP CHECK")
 
 
 
