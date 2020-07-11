@@ -36,7 +36,7 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
 
     # ctrl_time_dict["last_check"] = get_curr_datetime()
     if (data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] <= thres_dict["thres_ec_min"] ):
-        if (data["wlvl1"]):
+        if (int(data["wlvl1"])==0):
             print("\nALERT Cannot trigger fertilizer pump")
             return
         else:
@@ -45,7 +45,7 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
             control_pump_via_gpio("FER", "OFF")
         
     elif (data["ph"] >=thres_dict["thres_ph_max"] or data["ec"] >=thres_dict["thres_ec_max"]):
-        if (data["wlvl2"]):
+        if (int(data["wlvl2"])==0):
             print("\nALERT Cannot trigger water pump")
             return
         else:
