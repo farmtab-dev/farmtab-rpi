@@ -21,31 +21,11 @@ def update_thresholds(thres_obj, new_thres):
 
 #==========================#
 #  Check THRESHOLD  #
-#==========================#
-def check_pump(client, ctrl_time_dict, curr_pump_dict):
-    # Either Water / Fertilizer is activated
-    if (curr_pump_dict["WATER"] or curr_pump_dict["FER"]):
-        # Check for activation duration
-        # curr_time = get_curr_datetime()
-        # time_elapse = get_time_difference_in_sec(ctrl_time_dict["last_ctrl"], curr_time)
-        # if (time_elapse <= ctrl_time_dict["ctrl_interval"]):
-        #     print (ctrl_time_dict["ctrl_pump"] + " PUMP ON for " + str(time_elapse))
-        #     return 
-        print ("\nCHECK_PUMP ==> " + str(curr_pump_dict))
-        time.sleep(ctrl_time_dict["ctrl_interval"])
-        control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "OFF")
-        curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = False
-        ctrl_time_dict["ctrl_pump"] = None
-        ctrl_time_dict["last_ctrl"] = None
-    else:
-        print ("NO PUMP CHECK")
-
-
-
+#==========================#       
 def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
-    
-    print ("\nCHECK_THRES ==> PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
-           "ORP:" + str(data["orp"]) + "("+str(thres_dict["thres_orp_min"]) +"-"+ str(thres_dict["thres_orp_max"])+")")
+    print ("\nCHECK_THRES ==> "+
+           "PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
+           "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) +"-"+ str(thres_dict["thres_ec_max"])+")")
     # if (ctrl_time_dict["last_check"] is not None):
     #     # Check for last check duration
     #     curr_time = get_curr_datetime()
@@ -55,44 +35,22 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
     #         return 
 
     # ctrl_time_dict["last_check"] = get_curr_datetime()
-    if (data["ph"] <= thres_dict["thres_ph_min"] and data["orp"] <= thres_dict["thres_orp_min"] ):
-        # if (data["wlvl1"]):
-        #     return
-        ctrl_time_dict["last_ctrl"] = get_curr_datetime()
-        ctrl_time_dict["ctrl_pump"] = "FER"
-        curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = True
-        control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "ON")
+    if (data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] <= thres_dict["thres_ec_min"] ):
+        if (data["wlvl1"]):
+            print("\nALERT Cannot trigger fertilizer pump")
+            return
+        else:
+            control_pump_via_gpio("FER", "ON")
+            time.sleep(ctrl_time_dict["ctrl_interval"])
+            control_pump_via_gpio("FER", "OFF")
         
-    elif (data["ph"] >=thres_dict["thres_ph_max"] and data["orp"] >=thres_dict["thres_orp_max"]):
-        ctrl_time_dict["last_ctrl"] = get_curr_datetime()
-        ctrl_time_dict["ctrl_pump"] = "WATER"
-        curr_pump_dict[ctrl_time_dict["ctrl_pump"]] = True
-        control_pump_via_gpio(ctrl_time_dict["ctrl_pump"], "ON")
-            
-    
-def check_thresholdV2(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
-    
-    print ("\nCHECK_THRES ==> PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
-           "ORP:" + str(data["orp"]) + "("+str(thres_dict["thres_orp_min"]) +"-"+ str(thres_dict["thres_orp_max"])+")")
-    # if (ctrl_time_dict["last_check"] is not None):
-    #     # Check for last check duration
-    #     curr_time = get_curr_datetime()
-    #     time_elapse = get_time_difference_in_sec(ctrl_time_dict["last_check"], curr_time)
-    #     if (time_elapse < ctrl_time_dict["check_interval"]):
-    #         print ("    Delay checks for " + str(time_elapse))
-    #         return 
-
-    # ctrl_time_dict["last_check"] = get_curr_datetime()
-    if (data["ph"] <= thres_dict["thres_ph_min"] and data["orp"] <= thres_dict["thres_orp_min"] ):
-        # if (data["wlvl1"]):
-        #     return
-        control_pump_via_gpio("FER", "ON")
-        time.sleep(ctrl_time_dict["ctrl_interval"])
-        control_pump_via_gpio("FER", "OFF")
-        
-    elif (data["ph"] >=thres_dict["thres_ph_max"] and data["orp"] >=thres_dict["thres_orp_max"]):
-        control_pump_via_gpio("WATER", "ON")
-        time.sleep(ctrl_time_dict["ctrl_interval"])
-        control_pump_via_gpio("WATER", "OFF")
+    elif (data["ph"] >=thres_dict["thres_ph_max"] and data["ec"] >=thres_dict["thres_ec_max"]):
+        if (data["wlvl2"]):
+            print("\nALERT Cannot trigger water pump")
+            return
+        else:
+            control_pump_via_gpio("WATER", "ON")
+            time.sleep(ctrl_time_dict["ctrl_interval"])
+            control_pump_via_gpio("WATER", "OFF")
             
     

@@ -18,7 +18,7 @@ from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
 from func.farmtab_py_pump_control import control_pump_via_gpio
 from func.h_api_func import sync_cloud_thres_info
 from func.h_conversion_func import encode_obj_to_json
-from func.farmtab_py_threshold import  check_pump
+
 #===================#
 #  MQTT On Connect  #
 #===================#
@@ -155,7 +155,6 @@ def readSerialAndPub(client, l_client):
     READ_SERIAL["data"] = read_serial
     print("ARDUINO ==> ", READ_SERIAL["data"])
     #read_serial="PH@5#TEMP@25#EC@20"  
-    # check_pump(client, CTRL_TIME_DICT, CURR_PUMP_DICT) 
     # Check whether it is valid data before proceed to PROCESS + STORE
     s = READ_SERIAL["data"].decode('utf-8')
     if ("#" in s):
