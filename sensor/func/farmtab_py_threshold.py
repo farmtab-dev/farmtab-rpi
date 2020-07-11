@@ -14,9 +14,9 @@ def update_thresholds(thres_obj, new_thres):
     thres_obj["thres_ec_min"] = new_thres["thres_ec_min"]
     thres_obj["thres_ec_max"] = new_thres["thres_ec_max"]
     # ORP
-    thres_obj["thres_orp_min"] = new_thres["thres_co2_min"]
-    thres_obj["thres_orp_max"] = new_thres["thres_co2_max"]
-    print("SUCCESS update threshold")
+    thres_obj["thres_orp_min"] = new_thres["thres_orp_min"]
+    thres_obj["thres_orp_max"] = new_thres["thres_orp_max"]
+    print("SUCCESS update threshold - "+ str(thres_obj))
 
 
 #==========================#
