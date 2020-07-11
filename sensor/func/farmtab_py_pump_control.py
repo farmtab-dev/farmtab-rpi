@@ -3,6 +3,7 @@ import subprocess
 import os
 import RPi.GPIO as GPIO
 from config.cfg_farmtab_parameter import PUMP_PIN
+from func.h_datetime_func import get_curr_datetime
 
 def activate_usb_port():
     #os.system("sudo echo '1-1' > '/sys/bus/usb/drivers/usb/bind'")
@@ -23,22 +24,23 @@ def control_pump_via_gpio(pump_type, action):
         GPIO.output(PUMP_PIN["pinA"],GPIO.LOW)
         GPIO.output(PUMP_PIN["pinB"],GPIO.LOW)
         GPIO.output(PUMP_PIN["pinW"],GPIO.LOW)
+        print(" >>> Off all pumps - "+str(get_curr_datetime))
     elif (pump_type == "WATER"):
         GPIO.setup(PUMP_PIN["pinW"],GPIO.OUT)
         if (action == "ON"):
-            print ("ON WATER_PUMP")
+            print ("ON WATER_PUMP - "+str(get_curr_datetime))
             GPIO.output(PUMP_PIN["pinW"],GPIO.HIGH)
         else:
-            print ("OFF WATER_PUMP")
+            print ("OFF WATER_PUMP - "+str(get_curr_datetime))
             GPIO.output(PUMP_PIN["pinW"],GPIO.LOW)
     elif (pump_type == "FER"):
         GPIO.setup(PUMP_PIN["pinA"],GPIO.OUT)
         GPIO.setup(PUMP_PIN["pinB"],GPIO.OUT)
         if (action == "ON"):
-            print ("ON FERTILILZER_PUMP")
+            print ("ON FERTILILZER_PUMP - "+str(get_curr_datetime))
             GPIO.output(PUMP_PIN["pinA"],GPIO.HIGH)
             GPIO.output(PUMP_PIN["pinB"],GPIO.HIGH)
         else:
-            print ("OFF FERTILILZER_PUMP")
+            print ("OFF FERTILILZER_PUMP - "+str(get_curr_datetime))
             GPIO.output(PUMP_PIN["pinA"],GPIO.LOW)
             GPIO.output(PUMP_PIN["pinB"],GPIO.LOW)

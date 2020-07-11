@@ -170,7 +170,6 @@ def readSerialAndPub(client, l_client):
 def mqtt_main(comm_with, topic_list):
     print("\nCommunicate with - "+str(comm_with))
     print("Subscribing MQTT Topic - "+str(topic_list))
-    print(" >>> Off all pumps")
     control_pump_via_gpio("RESET", "OFF")
 
 
