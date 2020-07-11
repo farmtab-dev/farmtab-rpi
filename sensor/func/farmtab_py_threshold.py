@@ -44,7 +44,7 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
             time.sleep(ctrl_time_dict["ctrl_interval"])
             control_pump_via_gpio("FER", "OFF")
         
-    elif (data["ph"] >=thres_dict["thres_ph_max"] and data["ec"] >=thres_dict["thres_ec_max"]):
+    elif (data["ph"] >=thres_dict["thres_ph_max"] or data["ec"] >=thres_dict["thres_ec_max"]):
         if (data["wlvl2"]):
             print("\nALERT Cannot trigger water pump")
             return
