@@ -1,9 +1,13 @@
 from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, control_pump_via_gpio
 from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
 from func.farmtab_py_msg_prep import prepare_low_water_notification_message_obj, prepare_gpio_pump_notification_message_obj
-from func.mqtt_pub_msg_handler import mqtt_pub_msg
 from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC
 import time
+
+def mqtt_pub_msg(client, topic, msg):
+    client.publish(topic, msg, 0)
+    print(topic)
+    print(msg)
 
 def update_thresholds(thres_obj, new_thres):
     # TEMPERATURE
