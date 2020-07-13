@@ -1,6 +1,8 @@
 from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, control_pump_via_gpio
 from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
-
+from func.farmtab_py_msg_prep import prepare_low_water_notification_message_obj, prepare_gpio_pump_notification_message_obj
+from func.mqtt_pub_msg_handler import mqtt_pub_msg
+from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC
 import time
 
 def update_thresholds(thres_obj, new_thres):
@@ -35,22 +37,35 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
     #         return 
 
     # ctrl_time_dict["last_check"] = get_curr_datetime()
+    shelf_id = thres_dict["shelf_id"]
     if (data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] <= thres_dict["thres_ec_min"] ):
         if (int(data["wlvl1"])==0):
             print("\nALERT Cannot trigger fertilizer pump")
+            msg_str = prepare_low_water_notification_message_obj("fer", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             return
         else:
+            msg_str = prepare_gpio_pump_notification_message_obj("fer", "on", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             control_pump_via_gpio("FER", "ON")
             time.sleep(ctrl_time_dict["ctrl_interval"])
             control_pump_via_gpio("FER", "OFF")
+            msg_str = prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
         
     elif (data["ph"] >=thres_dict["thres_ph_max"] or data["ec"] >=thres_dict["thres_ec_max"]):
         if (int(data["wlvl2"])==0):
             print("\nALERT Cannot trigger water pump")
+            msg_str = prepare_low_water_notification_message_obj("fer", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             return
         else:
+            msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             control_pump_via_gpio("WATER", "ON")
             time.sleep(ctrl_time_dict["ctrl_interval"])
             control_pump_via_gpio("WATER", "OFF")
+            msg_str = prepare_gpio_pump_notification_message_obj("water", "off", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             
     

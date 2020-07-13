@@ -133,9 +133,9 @@ def parameter_tuning(client, mqtt_msg_str, cmd_action, curr_parameters):
     elif (cmd_action == "threshold"):
         tune_res = resync_cloud_thres_info(curr_parameters["threshold"]["shelf_id"], curr_parameters["threshold"])
         if(tune_res):
-            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_success")
+            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_success",curr_parameters["threshold"]["shelf_id"])
         else:
-            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_fail")
+            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_fail",curr_parameters["threshold"]["shelf_id"])
         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
     #--------#
     #  Etc.  #
@@ -180,7 +180,7 @@ def update_pump_status(client, mqtt_msg_str, curr_parameters):
             curr_parameters["pump"]["stat"] = False
             print("Pump is already OFF")
     if (generate_msg):
-        pump_msg = prepare_usb_notification_message_obj(curr_parameters["pump"]["stat"])
+        pump_msg = prepare_usb_notification_message_obj(curr_parameters["pump"]["stat"],curr_parameters["threshold"]["shelf_id"])
         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(pump_msg))
 
     return curr_parameters
