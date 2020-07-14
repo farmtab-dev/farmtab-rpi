@@ -31,7 +31,8 @@ def update_thresholds(thres_obj, new_thres):
 def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
     print ("\nCHECK_THRES ==> "+
            "PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
-           "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) +"-"+ str(thres_dict["thres_ec_max"])+")")
+           "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) +"-"+ str(thres_dict["thres_ec_max"])+") \t"+
+           "TDS:" + str(data["tds"]) + "("+str(thres_dict["thres_tds_min"]) +"-"+ str(thres_dict["thres_tds_max"])+")")
     # if (ctrl_time_dict["last_check"] is not None):
     #     # Check for last check duration
     #     curr_time = get_curr_datetime()
@@ -42,7 +43,7 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
 
     # ctrl_time_dict["last_check"] = get_curr_datetime()
     shelf_id = thres_dict["shelf_id"]
-    if (data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] <= thres_dict["thres_ec_min"] ):
+    if (data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] <= thres_dict["thres_ec_min"] or data["tds"] <= thres_dict["thres_tds_min"]):
         if (int(data["wlvl1"])==0):
             print("\nALERT Cannot trigger fertilizer pump")
             msg_str = prepare_low_water_notification_message_obj("fer", shelf_id)
@@ -57,7 +58,7 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
             msg_str = prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id)
             mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
         
-    elif (data["ph"] >=thres_dict["thres_ph_max"] or data["ec"] >=thres_dict["thres_ec_max"]):
+    elif (data["ph"] >=thres_dict["thres_ph_max"] or data["ec"] >=thres_dict["thres_ec_max"]or data["tds"] >=thres_dict["thres_tds_max"]):
         if (int(data["wlvl2"])==0):
             print("\nALERT Cannot trigger water pump")
             msg_str = prepare_low_water_notification_message_obj("fer", shelf_id)
