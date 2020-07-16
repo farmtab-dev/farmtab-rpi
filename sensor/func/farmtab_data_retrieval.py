@@ -17,8 +17,8 @@ def prepare_pub_sensor_data(sensor_data):
         "ec": sensor_data["ec"],  
         "orp": sensor_data["orp"],
         "tds": sensor_data["tds"],
-        "wlvl1": sensor_data["wlvl1"],
-        "wlvl2": sensor_data["wlvl2"] 
+        "fertilizer": sensor_data["water"],
+        "water": sensor_data["water"] 
     }
     return encode_obj_to_json(res)
 
@@ -37,8 +37,8 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
         "ec": -1,  # Temporary reading
         "orp": -1,
         "tds": -1,
-        "wlvl1": -1,
-        "wlvl2": -1
+        "fertilizer": -1,
+        "water": -1
     }
 
     i = 0
@@ -58,9 +58,9 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
             elif (d[0]=="TDS"):
                 res["tds"] = float(d[1])
             elif (d[0]=="WLVL1"):
-                res["wlvl1"] = float(d[1])
+                res["fertilizer"] = float(d[1])
             elif (d[0]=="WLVL2"):
-                res["wlvl2"] = float(d[1])
+                res["water"] = float(d[1])
 
     print(res)
     return res, encode_obj_to_json(res)

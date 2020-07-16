@@ -38,7 +38,7 @@ def check_thres_pub_sensor_data(client,CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_
     #mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], data_str)
     all_data = get_prev_data()
     print(all_data)
-    data_res = { "temp": 0, "ph": 0, "ec": 0,  "orp": 0, "tds": 0, "wlvl1":-1, "wlvl2":-1 }
+    data_res = { "temp": 0, "ph": 0, "ec": 0,  "orp": 0, "tds": 0, "fertilizer":-1, "water":-1 }
 
     if (len(all_data)>0):
         for data in all_data:
@@ -54,8 +54,8 @@ def check_thres_pub_sensor_data(client,CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_
     data_res['ec']/=len(all_data)
     data_res['orp']/=len(all_data)
     data_res['tds']/=len(all_data)
-    data_res['wlvl1']=all_data[-1]["wlvl1"]
-    data_res['wlvl2']=all_data[-1]["wlvl2"]
+    data_res['fertilizer']=all_data[-1]["fertilizer"]
+    data_res['water']=all_data[-1]["water"]
     print ("SENSOR DATA : ", data_res)
     check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
     print(CTRL_TIME_DICT,"\n")
