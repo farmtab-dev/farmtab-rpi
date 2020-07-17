@@ -150,6 +150,7 @@ mqtt_client.on('message', function(mqtt_topic, mqtt_msg, packet) {
     } else if (mqtt_topic.toString() === "/local/res_calibrate") {
         socket.emit('reply-calibration', {
             socket_id: res.socket,
+            serial_num: FARMTAB_SERIAL,
             disconnect: res.disconnect,
             calibrate_stat: res.c_stat,
             calibrate_msg: res.c_msg
