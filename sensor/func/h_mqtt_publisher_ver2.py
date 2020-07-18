@@ -130,7 +130,7 @@ def on_local_message(l_client, userdata, msg):
                 print ("SERIAL HERE ", SER)
                 print ("SERIAL MSG ", incoming_mqtt_msg) 
                 print ("SERIAL MSG ", type(incoming_mqtt_msg) )
-                print ("SERIAL HERE ", SER.write(incoming_mqtt_msg) )
+                print ("SERIAL HERE ", SER.write(incoming_mqtt_msg.encode()) )
 
                 print("\nCALIBRATION => Write command")
         else:
