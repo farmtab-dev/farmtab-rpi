@@ -127,11 +127,7 @@ def on_local_message(l_client, userdata, msg):
                 C_SOCKET["sid"] = ""
                 print("\nCALIBRATION => Close calibration")
             else:
-                print ("SERIAL HERE ", SER)
-                print ("SERIAL MSG ", incoming_mqtt_msg) 
-                print ("SERIAL MSG ", type(incoming_mqtt_msg) )
-                print ("SERIAL HERE ", SER.write(incoming_mqtt_msg.encode()) )
-
+                SER.write(incoming_mqtt_msg.encode()) 
                 print("\nCALIBRATION => Write command")
         else:
             pub_calibration_msg(l_client,mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
