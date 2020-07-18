@@ -17,7 +17,7 @@ def prepare_pub_sensor_data(sensor_data):
         "ec": sensor_data["ec"],  
         "orp": sensor_data["orp"],
         "tds": sensor_data["tds"],
-        "fertilizer": sensor_data["water"],
+        "fertilizer": sensor_data["fertilizer"],
         "water": sensor_data["water"] 
     }
     return encode_obj_to_json(res)
