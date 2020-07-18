@@ -21,13 +21,15 @@ DEFAULT_THRESHOLD = {
         'temperature': 0,
         'ph': 0,
         'ec': 0,
-        'co2': 0
+        'tds': 0,
+        'orp': 0
     },
     'max': {
         'temperature': 100,
         'ph': 14,
         'ec': 100,
-        'co2': 100
+        'tds': 100,
+        'orp': 100
     }
 }
 

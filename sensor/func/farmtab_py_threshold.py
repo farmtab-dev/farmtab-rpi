@@ -22,6 +22,9 @@ def update_thresholds(thres_obj, new_thres):
     # ORP
     thres_obj["thres_orp_min"] = new_thres["thres_orp_min"]
     thres_obj["thres_orp_max"] = new_thres["thres_orp_max"]
+    # TDS
+    thres_obj["thres_tds_min"] = new_thres["thres_tds_min"]
+    thres_obj["thres_tds_max"] = new_thres["thres_tds_max"]
     print("SUCCESS update threshold - "+ str(thres_obj))
 
 
