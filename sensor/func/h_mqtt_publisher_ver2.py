@@ -157,7 +157,8 @@ def pub_calibration_msg(l_client,socket, disconnect, c_stat, c_msg):
     l_client.publish("/local/res_calibrate", str(pub_sample_data), 0)
 
 def readSerialAndPub(client, l_client):
-    read_serial=SER.readline()   
+    #read_serial=SER.readline()   
+    read_serial=SER.readString()   
     READ_SERIAL["data"] = read_serial
     print("ARDUINO ==> ", READ_SERIAL["data"])
     #read_serial="PH@5#TEMP@25#EC@20"  
