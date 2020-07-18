@@ -237,8 +237,8 @@ function handleCurrRoomReport(room_info) {
 socket.on('req-script-state', handleScriptStateQuery)
 
 function handleScriptStateQuery(query_info) {
-    socket_id = query_info.from_sid;
-    describePM2ScriptAndReply(socket, query_info.from_sid, query_info.script_name, query_info.auto_disconnect)
+    socket_id = query_info.app_sid;
+    describePM2ScriptAndReply(socket, query_info.app_sid, query_info.script_name, query_info.auto_disconnect)
 }
 
 /*********************************
@@ -247,7 +247,7 @@ function handleScriptStateQuery(query_info) {
 socket.on('req-sample-sensor-data', handleSampleSensorData)
 
 function handleSampleSensorData(query_info) {
-    pubSampleSensorDataRequest(query_info.from_sid, query_info.auto_disconnect)
+    pubSampleSensorDataRequest(query_info.app_sid, query_info.auto_disconnect)
 }
 /*********************************
  *  Received calibrate
@@ -255,11 +255,11 @@ function handleSampleSensorData(query_info) {
 socket.on('req-init-calibration', handleInitCalibration)
 
 function handleInitCalibration(query_info) {
-    pubInitCalibrationRequest(query_info.from_sid)
+    pubInitCalibrationRequest(query_info.app_sid)
 }
 
 socket.on('send-calibration-cmd', handleCalibrationCMD)
 
 function handleCalibrationCMD(query_info) {
-    pubCalibrationCMD(query_info.from_sid, query_info.calibration_cmd)
+    pubCalibrationCMD(query_info.app_sid, query_info.calibration_cmd)
 }
