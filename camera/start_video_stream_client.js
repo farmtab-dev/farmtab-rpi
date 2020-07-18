@@ -152,7 +152,7 @@ socket.on('stop-video-stream', function() {
  *******************/
 socket.on('request-snapshot', function(req) {
     socket.emit("reply-snapshot", {
-        from_sid: req.from_sid,
+        app_sid: req.app_sid,
         disconnect: req.auto_disconnect,
         send_datetime: new Date(),
         cam_serial: CAM_SERIAL,
