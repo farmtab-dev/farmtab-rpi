@@ -125,7 +125,7 @@ def on_local_message(l_client, userdata, msg):
                 print("\nCALIBRATION => Init command")
             elif (incoming_mqtt_msg=="CLOSE"):  # Handle initial request 
                 C_SOCKET["sid"] = ""
-                pub_calibration_msg(l_client,mqtt_topic_token[-1],False, "CLOSE_CALIBRATION", "Stop calibration")
+                pub_calibration_msg(l_client,mqtt_topic_token[-1],True, "CLOSE_CALIBRATION", "Stop calibration")
                 print("\nCALIBRATION => Close calibration")
             else:
                 SER.write(incoming_mqtt_msg) 
