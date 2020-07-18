@@ -117,7 +117,7 @@ def on_local_message(l_client, userdata, msg):
         pub_sample_data = encode_obj_to_json(pub_sample_data)
         l_client.publish("/local/res_data", str(pub_sample_data), 0)
     elif (mqtt_topic_token[2] == 'calibrate'):   # CALIBRATE
-        print("Calibrate message ",incoming_mqtt_msg)
+        print("Calibrate message ", incoming_mqtt_msg)
         if (mqtt_topic_token[-1] == C_SOCKET["sid"] or C_SOCKET["sid"]==""):
             C_SOCKET["sid"] = mqtt_topic_token[-1]  # Update the SOCKET ID
             if (incoming_mqtt_msg=="INIT"):  # Handle initial request 
@@ -128,7 +128,7 @@ def on_local_message(l_client, userdata, msg):
                 print("\nCALIBRATION => Close calibration")
             else:
                 SER.write(incoming_mqtt_msg.encode()) 
-                print("\nCALIBRATION => Write command")
+                print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
         else:
             pub_calibration_msg(l_client,mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
 
