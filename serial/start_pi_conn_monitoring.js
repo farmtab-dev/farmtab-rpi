@@ -28,7 +28,7 @@ if (FARMTAB_SERIAL === "") {
 }
 
 // https://stackoverflow.com/questions/55623781/pm2-how-can-i-get-access-process-status-programmatically
-function describePM2ScriptAndReply(socket, socket_id, script_name, auto_disconnect, need_detail = false) {
+function describePM2ScriptAndReply(socket, app_sid, script_name, auto_disconnect, need_detail = false) {
     if (script_name === "calibrate_script") {
         is_calibrate = true;
         script_name = "sensor_script";
@@ -42,7 +42,7 @@ function describePM2ScriptAndReply(socket, socket_id, script_name, auto_disconne
             console.log("ERROR in Describe [" + script_name + "]:\n");
             console.log(err)
             socket.emit('incoming-script-state', {
-                socket_id: socket_id,
+                app_sid: app_sid,
                 pi_serial: FARMTAB_SERIAL,
                 script: is_calibrate ? "calibrate_script" : script_name,
                 status: "reading_error",
@@ -52,7 +52,7 @@ function describePM2ScriptAndReply(socket, socket_id, script_name, auto_disconne
             console.log("Total duplicate scripts: " + data.length)
             if (data.length === 0) {
                 socket.emit('incoming-script-state', {
-                    socket_id: socket_id,
+                    app_sid: app_sid,
                     pi_serial: FARMTAB_SERIAL,
                     script: is_calibrate ? "calibrate_script" : script_name,
                     status: "not_running",
@@ -61,7 +61,7 @@ function describePM2ScriptAndReply(socket, socket_id, script_name, auto_disconne
             } else {
                 data.forEach(d => {
                     socket.emit('incoming-script-state', {
-                        socket_id: socket_id,
+                        app_sid: app_sid,
                         pi_serial: FARMTAB_SERIAL,
                         script: is_calibrate ? "calibrate_script" : script_name,
                         status: d.pm2_env.status,
@@ -143,13 +143,13 @@ mqtt_client.on('message', function(mqtt_topic, mqtt_msg, packet) {
     res = JSON.parse(mqtt_msg.toString())
     if (mqtt_topic.toString() === "/local/res_data") {
         socket.emit('reply-sample-sensor-data', {
-            socket_id: res.socket,
+            app_sid: res.socket,
             disconnect: res.disconnect,
             sensor: res.sensor
         });
     } else if (mqtt_topic.toString() === "/local/res_calibrate") {
         socket.emit('reply-calibration', {
-            socket_id: res.socket,
+            app_sid: res.socket,
             serial_num: FARMTAB_SERIAL,
             disconnect: res.disconnect,
             calibrate_stat: res.c_stat,
@@ -172,19 +172,19 @@ mqtt_client.on("error", function(error) {
     process.exit(1);
 });
 
-function pubSampleSensorDataRequest(socket_id, auto_disconnect) {
-    console.log("Socket ID : [ " + socket_id + " ] => " + auto_disconnect)
-    mqtt_client.publish("/local/req_data/" + socket_id.toString(), auto_disconnect.toString())
+function pubSampleSensorDataRequest(app_sid, auto_disconnect) {
+    console.log("Socket ID : [ " + app_sid + " ] => " + auto_disconnect)
+    mqtt_client.publish("/local/req_data/" + app_sid.toString(), auto_disconnect.toString())
 }
 
-function pubInitCalibrationRequest(socket_id) {
-    console.log("Socket ID : [ " + socket_id + " ] => Init Calibration")
-    mqtt_client.publish("/local/calibrate/" + socket_id.toString(), "INIT")
+function pubInitCalibrationRequest(app_sid) {
+    console.log("Socket ID : [ " + app_sid + " ] => Init Calibration")
+    mqtt_client.publish("/local/calibrate/" + app_sid.toString(), "INIT")
 }
 
-function pubCalibrationCMD(socket_id, calibration_cmd) {
-    console.log("Socket ID : [ " + socket_id + " ] => Command Calibration")
-    mqtt_client.publish("/local/calibrate/" + socket_id.toString(), calibration_cmd.toString())
+function pubCalibrationCMD(app_sid, calibration_cmd) {
+    console.log("Socket ID : [ " + app_sid + " ] => Command Calibration")
+    mqtt_client.publish("/local/calibrate/" + app_sid.toString(), calibration_cmd.toString())
 }
 /*############################################################*/
 /* 		SOCKET CONNECTION - Start establish connection        */
@@ -237,7 +237,6 @@ function handleCurrRoomReport(room_info) {
 socket.on('req-script-state', handleScriptStateQuery)
 
 function handleScriptStateQuery(query_info) {
-    socket_id = query_info.app_sid;
     describePM2ScriptAndReply(socket, query_info.app_sid, query_info.script_name, query_info.auto_disconnect)
 }
 
