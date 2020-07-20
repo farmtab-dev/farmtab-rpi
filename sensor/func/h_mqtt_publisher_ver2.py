@@ -127,6 +127,8 @@ def on_local_message(l_client, userdata, msg):
                 C_SOCKET["sid"] = ""
                 print("\nCALIBRATION => Close calibration")
             else:
+                # https://pyserial.readthedocs.io/en/latest/shortintro.html
+                # https://stackoverflow.com/questions/53260841/sending-serial-data-to-arduino-using-python-script
                 SER.write(incoming_mqtt_msg.encode()) 
                 print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
         else:

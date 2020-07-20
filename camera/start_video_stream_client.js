@@ -18,6 +18,8 @@ const rasp2c = require('rasp2c'); // https://www.npmjs.com/package/@euoia/rasp2c
 const Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 const async = require("async"); // http://findnerd.com/list/view/Node-js-How-to-perform-endless-loop-with-async-module/21121/
 const path = require('path');
+// const cron = require("node-cron");
+
 /*-----------------
  *  CUSTOM IMPORTS
  *-----------------*/
@@ -179,10 +181,10 @@ function sendImageForProcessing() {
             cam_view_list: CAM_VIEWS.list,
             cam_feed: CAM_FEED_DICT
         });
-        console.log("Sent camera feed");
+        console.log("Sent camera feed for processing");
 
     } else {
-        console.log("No camera feed");
+        console.log("No camera feed for processing");
     }
 }
 
@@ -284,6 +286,15 @@ async function changeAndCaptureImage() {
     }
     updateCurrentCamState("Updated all camera stream", true)
 }
+
+
+// sudo pm2 start /opt/farmtab/farmtab-usb-video/start_video_stream_client.js  --cron "30 6,9,12,15,17 * * *"
+// cron.schedule("30 6,9,12,15,17 * * *", function() {
+//     console.log("ALERT - SEND IMAGES FOR PROCESSING");
+//     sendImageForProcessing();
+// });
+
+
 
 const run = async() => {
     while (true) {
