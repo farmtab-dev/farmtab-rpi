@@ -96,7 +96,7 @@ def tune_parameter(client, mqtt_topic, mqtt_msg_str, curr_parameters):
     else:
         # print("Cannot take action on Unknown topic : "+ str(mqtt_topic))
         print("Update Pump Stats")
-        curr_parameters = update_pump_status(client, mqtt_msg_str, curr_parameters)
+        # curr_parameters = update_pump_status(client, mqtt_msg_str, curr_parameters)
 
     return curr_parameters
 
@@ -132,11 +132,11 @@ def parameter_tuning(client, mqtt_msg_str, cmd_action, curr_parameters):
     #------------#
     elif (cmd_action == "threshold"):
         tune_res = resync_cloud_thres_info(curr_parameters["threshold"]["shelf_id"], curr_parameters["threshold"])
-        if(tune_res):
-            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_success",curr_parameters["threshold"]["shelf_id"])
-        else:
-            msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_fail",curr_parameters["threshold"]["shelf_id"])
-        mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+        # if(tune_res):
+        #     msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_success",curr_parameters["threshold"]["shelf_id"])
+        # else:
+        #     msg_str = prepare_thres_notification_message_obj(get_curr_datetime(), SEN_SERIAL, "thres_fail",curr_parameters["threshold"]["shelf_id"])
+        # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
     #--------#
     #  Etc.  #
     #--------#
@@ -148,7 +148,8 @@ def parameter_tuning(client, mqtt_msg_str, cmd_action, curr_parameters):
     
     mqtt_pub_msg(client, PUB_CLOUD_TOPIC["pub_tune"], "Modified "+ cmd_action)
     return curr_parameters
-    
+
+# DISABLED
 def update_pump_status(client, mqtt_msg_str, curr_parameters):
     generate_msg = False
     #-----------#
