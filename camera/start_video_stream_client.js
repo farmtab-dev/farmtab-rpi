@@ -287,7 +287,7 @@ async function changeAndCaptureImage() {
     updateCurrentCamState("Updated all camera stream", true)
 }
 
-
+// https://www.digitalocean.com/community/tutorials/nodejs-cron-jobs-by-examples
 // sudo pm2 start /opt/farmtab/farmtab-usb-video/start_video_stream_client.js  --cron "30 6,9,12,15,17 * * *"
 // cron.schedule("30 6,9,12,15,17 * * *", function() {
 //     console.log("ALERT - SEND IMAGES FOR PROCESSING");
