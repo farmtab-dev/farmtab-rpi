@@ -1,21 +1,22 @@
 {
-  "name": "video_stream",
-  "version": "1.0.0",
-  "description": "Project to handle incoming video stream request",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Eng Kee",
-  "license": "ISC",
-  "dependencies": {
-    "async": "^3.1.0",
-    "express": "^4.16.4",
-    "mqtt": "^2.18.8",
-    "onoff": "^5.0.0",
-    "opencv4nodejs": "^4.14.1",
-    "rasp2c": "0.0.3",
-    "simple-node-logger": "^18.12.22",
-    "socket.io": "^2.2.0"
-  }
+    "name": "video_stream",
+    "version": "1.0.0",
+    "description": "Project to handle incoming video stream request",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Eng Kee",
+    "license": "ISC",
+    "dependencies": {
+        "async": "^3.1.0",
+        "express": "^4.16.4",
+        "mqtt": "^2.18.8",
+        "onoff": "^5.0.0",
+        "opencv4nodejs": "^4.14.1",
+        "pm2": "^4.4.0",
+        "rasp2c": "0.0.3",
+        "simple-node-logger": "^18.12.22",
+        "socket.io": "^2.2.0"
+    }
 }

@@ -269,19 +269,18 @@ function handleCalibrationCMD(query_info) {
 }
 
 
+const sleep = delay => new Promise(resolve => setTimeout(resolve, delay));
+
 socket.on('start-cal-sensor', handleStartCalibration)
 
-function handleStartCalibration(query_info) {
+async function handleStartCalibration(query_info) {
     // pubCalibrationCMD(query_info.app_sid, query_info.calibrate_sensor)
-    setTimeout(() => {
-        pubSensorCalibrateCMD(query_info.app_sid, "ENTER" + query_info.calibrate_sensor)
-    }, 5 * 1000);
-    setTimeout(() => {
-        pubSensorCalibrateCMD(query_info.app_sid, "CAL" + query_info.calibrate_sensor)
-    }, 5 * 1000);
-    setTimeout(() => {
-        pubSensorCalibrateCMD(query_info.app_sid, "EXIT" + query_info.calibrate_sensor)
-    }, 5 * 1000);
+    await sleep(5 * 1000);
+    pubSensorCalibrateCMD(query_info.app_sid, "ENTER" + query_info.calibrate_sensor)
+    await sleep(5 * 1000);
+    pubSensorCalibrateCMD(query_info.app_sid, "CAL" + query_info.calibrate_sensor)
+    await sleep(5 * 1000);
+    pubSensorCalibrateCMD(query_info.app_sid, "EXIT" + query_info.calibrate_sensor)
 
     socket.emit('end-cal-sensor', {
         app_sid: query_info.app_sid,
