@@ -282,6 +282,14 @@ function handleStartCalibration(query_info) {
     setTimeout(() => {
         pubSensorCalibrateCMD(query_info.app_sid, "EXIT" + query_info.calibrate_sensor)
     }, 5 * 1000);
+
+    socket.emit('end-cal-sensor', {
+        app_sid: query_info.app_sid,
+        serial_num: FARMTAB_SERIAL,
+        disconnect: false,
+        calibrate_stat: "COMP_CALIBRATE",
+        calibrate_msg: "Completed calibrate " + query_info.calibrate_sensor + " sensor"
+    });
 }
 socket.on('close-calibration', handleCloseCalibration)
 
