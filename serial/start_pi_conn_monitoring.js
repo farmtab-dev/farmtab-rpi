@@ -186,6 +186,11 @@ function pubCalibrationCMD(app_sid, calibration_cmd) {
     console.log("Socket ID : [ " + app_sid + " ] => Command Calibration")
     mqtt_client.publish("/local/calibrate/" + app_sid.toString(), calibration_cmd.toString())
 }
+
+function pubSensorCalibrateCMD(app_sid, calibration_cmd) {
+    console.log("Socket ID : [ " + app_sid + " ] => Command Calibration")
+    mqtt_client.publish("/local/sensor_cmd/" + app_sid.toString(), calibration_cmd.toString())
+}
 /*############################################################*/
 /* 		SOCKET CONNECTION - Start establish connection        */
 /*############################################################*/
@@ -261,4 +266,25 @@ socket.on('send-calibration-cmd', handleCalibrationCMD)
 
 function handleCalibrationCMD(query_info) {
     pubCalibrationCMD(query_info.app_sid, query_info.calibration_cmd)
+}
+
+
+socket.on('start-cal-sensor', handleStartCalibration)
+
+function handleStartCalibration(query_info) {
+    // pubCalibrationCMD(query_info.app_sid, query_info.calibrate_sensor)
+    setTimeout(() => {
+        pubSensorCalibrateCMD(query_info.app_sid, "ENTER" + query_info.calibrate_sensor)
+    }, 5 * 1000);
+    setTimeout(() => {
+        pubSensorCalibrateCMD(query_info.app_sid, "CAL" + query_info.calibrate_sensor)
+    }, 5 * 1000);
+    setTimeout(() => {
+        pubSensorCalibrateCMD(query_info.app_sid, "EXIT" + query_info.calibrate_sensor)
+    }, 5 * 1000);
+}
+socket.on('close-calibration', handleCloseCalibration)
+
+function handleCloseCalibration(query_info) {
+    pubCalibrationCMD(query_info.app_sid, "CLOSE")
 }
