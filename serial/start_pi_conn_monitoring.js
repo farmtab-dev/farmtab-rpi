@@ -281,6 +281,7 @@ async function handleStartCalibration(query_info) {
     pubSensorCalibrateCMD(query_info.app_sid, "CAL" + query_info.calibrate_sensor)
     await sleep(5 * 1000);
     pubSensorCalibrateCMD(query_info.app_sid, "EXIT" + query_info.calibrate_sensor)
+    await sleep(5 * 1000);
 
     socket.emit('end-cal-sensor', {
         app_sid: query_info.app_sid,
