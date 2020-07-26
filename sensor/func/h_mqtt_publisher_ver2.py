@@ -39,8 +39,8 @@ def on_local_connect(l_client, userdata, flags, rc):
     print("\nSuccessful MQTT local connection with result code "+str(rc))
 
     l_client.subscribe("/local/req_data/#")    # For sample data request
-    l_client.subscribe("/local/calibrate/#")   # For calibrate sensor - FOR Init & Close
-    l_client.subscribe("/local/sensor_cmd/#")   # For calibrate sensor - Delay
+    l_client.subscribe("/local/calibrate/#")   # For calibrate sensor 
+    # l_client.subscribe("/local/sensor_cmd/#")   # For calibrate sensor - Delay
 
 #======================#
 #  MQTT On Disconnect  #
@@ -127,18 +127,18 @@ def on_local_message(l_client, userdata, msg):
             elif (incoming_mqtt_msg=="CLOSE"):  # Handle initial request 
                 C_SOCKET["sid"] = ""
                 print("\nCALIBRATION => Close calibration")
-            # else:
-            #     # https://pyserial.readthedocs.io/en/latest/shortintro.html
-            #     # https://stackoverflow.com/questions/53260841/sending-serial-data-to-arduino-using-python-script
-            #     SER.write(incoming_mqtt_msg.encode()) 
-            #     print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
+            else:
+                # https://pyserial.readthedocs.io/en/latest/shortintro.html
+                # https://stackoverflow.com/questions/53260841/sending-serial-data-to-arduino-using-python-script
+                SER.write(incoming_mqtt_msg.encode()) 
+                print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
         else:
             pub_calibration_msg(l_client,mqtt_topic_token[-1], True,"DUP_CALIBRATION","Another instance is calibrating.")
-    elif (mqtt_topic_token[2] == 'sensor_cmd'):   # CALIBRATE CMD
-        # https://pyserial.readthedocs.io/en/latest/shortintro.html
-        # https://stackoverflow.com/questions/53260841/sending-serial-data-to-arduino-using-python-script
-        SER.write(incoming_mqtt_msg.encode()) 
-        print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
+    # elif (mqtt_topic_token[2] == 'sensor_cmd'):   # CALIBRATE CMD
+    #     # https://pyserial.readthedocs.io/en/latest/shortintro.html
+    #     # https://stackoverflow.com/questions/53260841/sending-serial-data-to-arduino-using-python-script
+    #     SER.write(incoming_mqtt_msg.encode()) 
+    #     print("\nCALIBRATION => Write command ", incoming_mqtt_msg.encode())
 
 #===============#
 #  MQTT On Log  #
