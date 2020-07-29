@@ -31,8 +31,8 @@ config.sleep = (milliseconds) => {
 config.CRON_JOB_INTERVAL = process.env.INTERVAL_CRON || TIME_VALUE.hour * 3;
 config.CHANGE_CAM_INTERVAL = process.env.INTERVAL_CHG_CAM || TIME_VALUE.sec * 10;
 config.UPDATE_CAM_FEED = process.env.INTERVAL_CAP_IMG || TIME_VALUE.sec * 5;
-config.SEND_IMG_HOUR = [6, 9, 12, 15];
-// config.SEND_IMG_HOUR = [7, 10, 13, 16];
+// config.SEND_IMG_HOUR = [6, 9, 12, 15];
+config.SEND_IMG_HOUR = [7, 10, 13, 16];
 
 /*******************
  *  EXPORT CONFIG
