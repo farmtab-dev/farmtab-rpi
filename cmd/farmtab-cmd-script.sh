@@ -469,7 +469,8 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${FARMTAB_SERIAL
                 pm2 start  /opt/farmtab-rpi/camera/start_video_stream_client.js --name=${APPNAME} --silent
             fi
             printf "${BYELLOW}Enable ${1} script on startup${NC}\n"
-            pm2 save --silent
+            # pm2 save --silent
+            pm2 save --silent --force
         else
             printf "${BYELLOW}Restarting ${1} script${NC}\n"
             pm2 restart ${APPNAME} --silent --update-env
@@ -490,7 +491,8 @@ start_pi_conn_monitor_script(){
         printf "${BYELLOW}Starting Pi connection monitoring script${NC}\n"
         pm2 start  /opt/farmtab-rpi/serial/start_pi_conn_monitoring.js --name=${APPNAME} --silent
         printf "${BYELLOW}Enable Pi connection monitoring script on startup${NC}\n"
-        pm2 save --silent
+        # pm2 save --silent
+        pm2 save --silent --force
     else
         printf "${BYELLOW}Restarting Pi connection monitoring script${NC}\n"
         pm2 restart ${APPNAME} --silent --update-env
