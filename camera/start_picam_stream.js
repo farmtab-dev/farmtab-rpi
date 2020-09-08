@@ -10,7 +10,7 @@ fswebcam - r 1280 x720 /home/pi/Desktop/HELLO.jpg
  *============*/
 const SimpleNodeLogger = require("simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
 const io = require('socket.io-client');
-const PiCamera = require('pi-camera'); // https://www.npmjs.com/package/pi-camera
+// const PiCamera = require('pi-camera'); // https://www.npmjs.com/package/pi-camera
 const { StillCamera } = require("pi-camera-connect");
 const fs = require('fs');
 const spawn = require('child_process').spawn;
@@ -250,19 +250,18 @@ const changeCamera = (targetCamLvl, targetCamSlot) => {
 
 var vCap;
 
-function captureImage(targetCamLvl, targetCamSlot) {
+async function captureImage(targetCamLvl, targetCamSlot) {
     CAM_FEED_DICT[targetCamLvl].cap_time = new Date();
     // vCap.set(cv.CAP_PROP_FPS, FPS) - https://docs.opencv.org/3.1.0/d8/dfe/classcv_1_1VideoCapture.html#a8c6d8c2d37505b5ca61ffd4bb54e9a7c
     // console.log("Finish Setup camera -> %sX%s fps - %s, rotate 180deg : %s", IMG_WIDTH, IMG_HEIGHT, FPS, NEED_ROTATE);
     log.warn("Setup [ " + targetCamLvl + " ] camera - [ Slot_" + targetCamSlot + " ] - > ", IMG_WIDTH, " x ", IMG_HEIGHT, ", fps - ", FPS, ", rotate 180 deg: ", NEED_ROTATE[targetCamLvl]);
     try {
-        // vCap = new cv.VideoCapture(0);
-        // vCap.set(cv.CAP_PROP_FRAME_WIDTH, IMG_WIDTH);
-        // vCap.set(cv.CAP_PROP_FRAME_HEIGHT, IMG_HEIGHT);
         const stillCamera = new StillCamera();
 
         const image = await stillCamera.takeImage();
-        CAM_FEED_DICT[targetCamLvl].img = image; //cv.imencode(".jpg", vCap.read()).toString('base64');
+        // CAM_FEED_DICT[targetCamLvl].img = new Buffer(image, 'base64').toString('ascii'); //cv.imencode(".jpg", vCap.read()).toString('base64');
+        // CAM_FEED_DICT[targetCamLvl].img = image; //cv.imencode(".jpg", vCap.read()).toString('base64');
+        CAM_FEED_DICT[targetCamLvl].img = image.toString('base64'); //cv.imencode(".jpg", vCap.read()).toString('base64');
         haveCamFeed =
             "lvl1:" + (CAM_FEED_DICT.lvl1.img != '') + ", lvl2:" + (CAM_FEED_DICT.lvl2.img != '') +
             ", lvl3:" + (CAM_FEED_DICT.lvl3.img != '') + ", lvl4:" + (CAM_FEED_DICT.lvl4.img != '');
