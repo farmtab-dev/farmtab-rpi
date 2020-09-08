@@ -10,7 +10,7 @@ fswebcam - r 1280 x720 /home/pi/Desktop/HELLO.jpg
  *============*/
 const SimpleNodeLogger = require("simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
 const io = require('socket.io-client');
-process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1
+process.env.OPENCV4NODEJS_DISABLE_EXTERNAL_MEM_TRACKING = 1 // "opencv4nodejs": "^4.14.1",
 const cv = require('opencv4nodejs');
 const fs = require('fs');
 const spawn = require('child_process').spawn;
