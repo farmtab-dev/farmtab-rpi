@@ -41,9 +41,10 @@ if (CAM_SERIAL === "") {
  * Setup Camera  - Adjust based on camera placement
  *===============*/
 // RUN CMD if have error for VideoCapture : sudo modprobe bcm2835-v4l2 
-const FPS = CAMERA.fps;
-const IMG_WIDTH = CAMERA.img_width;
-const IMG_HEIGHT = CAMERA.img_height;
+const stillCamera = new StillCamera({
+    width: CAMERA.img_width,
+    height: CAMERA.img_height
+});
 const CAM_I2C = CAMERA.i2c;
 const NEED_ROTATE = CAMERA.need_rotate;
 
@@ -164,12 +165,12 @@ socket.on('request-snapshot', function(req) {
 });
 
 function updateCurrentCamState(state, can_request = false) {
-    console.log("SEND STATE : \n", state);
     socket.emit("publish-camera-state", {
         serial_num: CAM_SERIAL,
         state: state,
         can_request: can_request
     });
+    console.log("SEND STATE : \n", state);
 }
 
 function sendImageForProcessing() {
@@ -181,7 +182,6 @@ function sendImageForProcessing() {
             cam_feed: CAM_FEED_DICT
         });
         console.log("Sent camera feed for processing");
-
     } else {
         console.log("No camera feed for processing");
     }
@@ -248,22 +248,18 @@ const changeCamera = (targetCamLvl, targetCamSlot) => {
 }
 
 
-const stillCamera = new StillCamera();
+
 
 async function captureImage(targetCamLvl, targetCamSlot) {
     CAM_FEED_DICT[targetCamLvl].cap_time = new Date();
-    // vCap.set(cv.CAP_PROP_FPS, FPS) - https://docs.opencv.org/3.1.0/d8/dfe/classcv_1_1VideoCapture.html#a8c6d8c2d37505b5ca61ffd4bb54e9a7c
-    // console.log("Finish Setup camera -> %sX%s fps - %s, rotate 180deg : %s", IMG_WIDTH, IMG_HEIGHT, FPS, NEED_ROTATE);
-    log.warn("Setup [ " + targetCamLvl + " ] camera - [ Slot_" + targetCamSlot + " ] - > ", IMG_WIDTH, " x ", IMG_HEIGHT, ", fps - ", FPS, ", rotate 180 deg: ", NEED_ROTATE[targetCamLvl]);
+    log.warn("Setup [ ", targetCamLvl, " ] camera - [ Slot_", targetCamSlot, " ] , rotate 180 deg: ", NEED_ROTATE[targetCamLvl]);
     try {
-        const image = await stillCamera.takeImage();
-        CAM_FEED_DICT[targetCamLvl].img = image.toString('base64'); //cv.imencode(".jpg", vCap.read()).toString('base64');
-        haveCamFeed =
-            "lvl1:" + (CAM_FEED_DICT.lvl1.img != '') + ", lvl2:" + (CAM_FEED_DICT.lvl2.img != '') +
+        img_snapshot = await stillCamera.takeImage();
+        CAM_FEED_DICT[targetCamLvl].img = img_snapshot.toString('base64');
+        haveCamFeed = "lvl1:" + (CAM_FEED_DICT.lvl1.img != '') + ", lvl2:" + (CAM_FEED_DICT.lvl2.img != '') +
             ", lvl3:" + (CAM_FEED_DICT.lvl3.img != '') + ", lvl4:" + (CAM_FEED_DICT.lvl4.img != '');
         console.log("Updated CAM [" + targetCamLvl + "] - [ Slot_" + targetCamSlot + "] ->" + haveCamFeed)
         updateCurrentCamState("Updated camera view [" + targetCamLvl + "] - [ Slot_" + targetCamSlot + " ]")
-            // vCap.release();
     } catch (error) {
         console.log("ERROR in capture image : ", error)
     }
