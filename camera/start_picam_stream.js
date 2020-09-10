@@ -10,7 +10,7 @@ fswebcam - r 1280 x720 /home/pi/Desktop/HELLO.jpg
  *============*/
 const SimpleNodeLogger = require("simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
 const io = require('socket.io-client');
-const { StillCamera,ExposureMode, AwbMode   } = require("pi-camera-connect"); // https://github.com/launchcodedev/pi-camera-connect
+const { StillCamera, ExposureMode, AwbMode } = require("pi-camera-connect"); // https://github.com/launchcodedev/pi-camera-connect
 const fs = require('fs');
 const spawn = require('child_process').spawn;
 const rasp2c = require('rasp2c'); // https://www.npmjs.com/package/@euoia/rasp2c
@@ -41,14 +41,14 @@ if (CAM_SERIAL === "") {
  * Setup Camera  - Adjust based on camera placement
  *===============*/
 // RUN CMD if have error for VideoCapture : sudo modprobe bcm2835-v4l2 
-const stillCamera = new StillCamera({
-    width: CAMERA.img_width,
-    height: CAMERA.img_height,
-    sharpness: 0,
-    contrast:0,
-    brightness: 50,
-    saturation: 0
-});
+// const stillCamera = new StillCamera({
+//     width: CAMERA.img_width,
+//     height: CAMERA.img_height,
+//     sharpness: 0,
+//     contrast:0,
+//     brightness: 50,
+//     saturation: 0
+// });
 /*
 sharpness: number - Range: -100-100; Default: 0
 contrast: number - Range: -100-100; Default: 0
@@ -264,6 +264,14 @@ async function captureImage(targetCamLvl, targetCamSlot) {
     CAM_FEED_DICT[targetCamLvl].cap_time = new Date();
     log.warn("Setup [ ", targetCamLvl, " ] camera - [ Slot_", targetCamSlot, " ] , rotate 180 deg: ", NEED_ROTATE[targetCamLvl]);
     try {
+        const stillCamera = new StillCamera({
+            width: CAMERA.img_width,
+            height: CAMERA.img_height,
+            // sharpness: 0,
+            // contrast: 0,
+            // brightness: 50,
+            // saturation: 0
+        });
         img_snapshot = await stillCamera.takeImage();
         CAM_FEED_DICT[targetCamLvl].img = img_snapshot.toString('base64');
         haveCamFeed = "lvl1:" + (CAM_FEED_DICT.lvl1.img != '') + ", lvl2:" + (CAM_FEED_DICT.lvl2.img != '') +
