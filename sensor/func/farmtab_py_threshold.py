@@ -77,3 +77,57 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
             # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             
     
+def check_threshold_sr(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
+    print ("\nCHECK_THRES ==> "+
+           "PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) +"-"+ str(thres_dict["thres_ph_max"])+") \t"+
+           "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) +"-"+ str(thres_dict["thres_ec_max"])+") \t"+
+           "TDS:" + str(data["tds"]) + "("+str(thres_dict["thres_tds_min"]) +"-"+ str(thres_dict["thres_tds_max"])+")")
+
+
+    shelf_id = thres_dict["shelf_id"]
+    if (int(data["water"]) == 0):
+        print("\nLow water")
+        if (int(data["fertilizer"]) == 0):
+            print("\nALERT Cannot trigger water - Low water supply")
+            msg_str = prepare_low_water_notification_message_obj("water", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+            return
+        else:
+            msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
+            mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+            control_pump_via_gpio("WATER", "ON")
+            time.sleep(ctrl_time_dict["ctrl_interval"])
+            control_pump_via_gpio("WATER", "OFF")
+
+           
+    # if (data["ec"] <= thres_dict["thres_ec_min"] and data["tds"] <= thres_dict["thres_tds_min"]):
+    #     if (int(data["fertilizer"])==0):
+    #         print("\nALERT Cannot trigger fertilizer pump")
+    #         msg_str = prepare_low_water_notification_message_obj("fer", shelf_id)
+    #         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+    #         return
+    #     else:
+    #         msg_str = prepare_gpio_pump_notification_message_obj("fer", "on", shelf_id)
+    #         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+    #         control_pump_via_gpio("FER", "ON")
+    #         time.sleep(ctrl_time_dict["ctrl_interval"])
+    #         control_pump_via_gpio("FER", "OFF")
+    #         # msg_str = prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id)
+    #         # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+        
+    # elif (data["ec"] >= thres_dict["thres_ec_max"] and data["tds"] >= thres_dict["thres_tds_max"]):
+    #     if (int(data["water"])==0):
+    #         print("\nALERT Cannot trigger water pump")
+    #         msg_str = prepare_low_water_notification_message_obj("water", shelf_id)
+    #         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+    #         return
+    #     else:
+    #         msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
+    #         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+    #         control_pump_via_gpio("WATER", "ON")
+    #         time.sleep(ctrl_time_dict["ctrl_interval"])
+    #         control_pump_via_gpio("WATER", "OFF")
+    #         # msg_str = prepare_gpio_pump_notification_message_obj("water", "off", shelf_id)
+    #         # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
+            
+    
