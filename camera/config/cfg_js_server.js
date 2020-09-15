@@ -34,6 +34,8 @@ config.log.usb_opts = {
  *  CONNECTION  *
  ****************/
 config.socket_server_url = process.env.SOCKET_SERVER_URL || '';
+config.udp_socket_host = process.env.UDP_SOCKET_HOST || '';
+config.udp_socket_port = process.env.UDP_SOCKET_PORT || '';
 
 /*******************
  *   MQTT CONFIG
