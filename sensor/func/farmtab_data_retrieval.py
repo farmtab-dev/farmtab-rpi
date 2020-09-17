@@ -67,7 +67,7 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
 
 #https://stackoverflow.com/questions/37474784/query-datetime-with-pymongo
 def get_prev_data():
-    item_query = {'data_datetime':{'$lt':get_curr_datetime_without_format(), '$gt':get_curr_datetime_without_format() - datetime.timedelta(hours=1)}}
+    item_query = {'data_datetime':{'$lt':get_curr_datetime_without_format(), '$gt':get_curr_datetime_without_format() - datetime.timedelta(hours=3)}}
     # field_restrict = {
     #     'serial_number': 1,
     #     'plant_id': 1,

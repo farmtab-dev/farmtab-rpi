@@ -6,6 +6,8 @@ def get_curr_date():
 #-----------------------#   "%A %d %B %Y %I:%M:%S%p" ===> Tuesday 09 April 2019 03:39:05PM
 #  Get current datetime #
 #-----------------------#
+def get_hour():
+    return datetime.datetime.now().hour
 def get_curr_datetime_without_format():
     return datetime.datetime.now()
 def get_curr_datetime():
