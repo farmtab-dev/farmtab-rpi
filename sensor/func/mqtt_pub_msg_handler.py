@@ -68,8 +68,7 @@ def check_thres_pub_sensor_data(client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOL
     data_res['water'] = all_data[-1]["water"]
     print("SENSOR DATA : ", data_res)
     check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
-    # check_threshold_sr(client, CTRL_TIME_DICT,
-    #                    CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
+    # check_threshold_sr(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
     print(CTRL_TIME_DICT, "\n")
     print(CURR_PUMP_DICT, "\n")
     print(THRESHOLD_DICT)
