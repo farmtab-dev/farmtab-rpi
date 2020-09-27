@@ -3,9 +3,11 @@
 from PIL import Image
 import os
 
+COLOR_MODEL="RGB" # JPEG - 'RGB', PNG - 'RGBA'
+
 def join_images(*rows, bg_color=(0, 0, 0, 0), alignment=(0.5, 0.5)):
     rows = [
-        [image.convert('RGBA') for image in row]
+        [image.convert(COLOR_MODEL) for image in row]
         for row
         in rows
     ]
@@ -23,7 +25,7 @@ def join_images(*rows, bg_color=(0, 0, 0, 0), alignment=(0.5, 0.5)):
     ]
 
     tmp = Image.new(
-        'RGBA',
+        COLOR_MODEL,
         size=(sum(widths), sum(heights)),
         color=bg_color
     )
@@ -53,7 +55,7 @@ def join_images_vertically(*column, bg_color=(0, 0, 0), alignment=(0.5, 0.5)):
     )
 
 def getExistImgFilepath(fp,img_size):
-    return  Image.open(fp) if   os.path.exists(fp) else Image.new('RGBA', img_size, (255,255,255,0))
+    return  Image.open(fp) if   os.path.exists(fp) else Image.new(COLOR_MODEL, img_size, (220,220,220))
 
 def get4X4ImgMerged(img_cfg, file_cfg):
     img_size = (img_cfg["width"], img_cfg["height"])
@@ -62,7 +64,7 @@ def get4X4ImgMerged(img_cfg, file_cfg):
         [getExistImgFilepath(file_cfg["fpA"],img_size), getExistImgFilepath(file_cfg["fpB"],img_size)],
         [getExistImgFilepath(file_cfg["fpC"],img_size), getExistImgFilepath(file_cfg["fpD"],img_size)],
     ]
-    fp = file_cfg["dirpath"] + '/' + "COMBINED.png"
+    fp = file_cfg["dirpath"] + '/' + "COMBINED.jpg"
     join_images(*images, bg_color='grey', alignment=(1, 1)).save(fp)
     print(fp)
     return fp
