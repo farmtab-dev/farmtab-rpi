@@ -504,8 +504,9 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${FARMTAB_SERIAL
             if [ $2 -eq 1 ]; then 
                 pm2 start  /opt/farmtab-rpi/sensor/start_pi_arduino_publisher.py --interpreter=python3 --name=${APPNAME} --silent
             else
-                pm2 start  /opt/farmtab-rpi/camera/start_picam_stream.js --name=${APPNAME} --silent
-                # pm2 start  /opt/farmtab-rpi/camera/start_video_stream_client.js --name=${APPNAME} --silent
+                pm2 start  /opt/farmtab-rpi/camera/picam_python/start_picam_stream.py --interpreter=python3 --name=${APPNAME} --silent
+                # pm2 start  /opt/farmtab-rpi/camera/picam_nodejs/start_picam_stream.js --name=${APPNAME} --silent
+                # pm2 start  /opt/farmtab-rpi/camera/picam_nodejs/start_video_stream_client.js --name=${APPNAME} --silent
             fi
             printf "${BYELLOW}Enable ${1} script on startup${NC}\n"
             # pm2 save --silent
