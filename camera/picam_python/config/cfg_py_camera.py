@@ -45,6 +45,12 @@ S3_CFG = {
 
 
 TOTAL_CAM=os.environ.get('TOTAL_CAM', "0")
+CAM_NEED_ROTATE = { # TO_CHANGE: Camera rotation for (1)
+    'lvl1': os.environ.get("CAM_ROTATE_LVL1",False),
+    'lvl2': os.environ.get("CAM_ROTATE_LVL2",False),
+    'lvl3': os.environ.get("CAM_ROTATE_LVL3",False),
+    'lvl4': os.environ.get("CAM_ROTATE_LVL4",False),
+}
 if(TOTAL_CAM=="4" or TOTAL_CAM==4):
     CAM_SLOT_OBJ = {
         'lvl1': os.environ.get("CAM_SLOT_LVL1",""),

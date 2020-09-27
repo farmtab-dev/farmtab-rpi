@@ -13,7 +13,7 @@ import boto3
 s3_client = boto3.client('s3')
 from func.h_img_join_func import get4X4ImgMerged
 from func.h_arducam_func import changeCam, captureImg
-from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR,TIME_INTERVAL, DEBUG, S3_CFG,FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST
+from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR,TIME_INTERVAL, DEBUG, S3_CFG,FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE
 
 # photo props
 # image_width = cfg['image_settings']['horizontal_res']
@@ -77,7 +77,8 @@ def uploadAllToS3():
     # for x in CAM_SLOT_LIST:  
     #     f = FILE_CFG["dirpath"] + '/'+ x + FILE_CFG["imgfile_ext"] 
     for i in range(len(CAM_SLOT_LIST)):
-        uploadToS3(getCamFilepath(i),CAM_SLOT_LIST[i].upper(), CAM_SLOT_OBJ[CAM_SLOT_LIST[i]])
+        camLvl = CAM_SLOT_LIST[i]
+        uploadToS3(getCamFilepath(i),camLvl.upper(), CAM_SLOT_OBJ[camLvl])
     
     fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
         "dirpath": FILE_CFG["dirpath"],
@@ -95,8 +96,9 @@ def main():
         schedule.run_pending()
 
         # Set curr Camera Slot
-        currCamSlot = CAM_SLOT_OBJ[CAM_SLOT_LIST[i]]
-        print ("\nCurrent [ " + CAM_SLOT_LIST[i] + " ] camera - [ Slot_" + currCamSlot + " ]")
+        camLvl = CAM_SLOT_LIST[i]
+        currCamSlot = CAM_SLOT_OBJ[camLvl]
+        print ("\nCurrent [ " + camLvl + " ] camera - [ Slot_" + currCamSlot + " ]")
 
         # Build filename string
         filepath =getCamFilepath(i)
@@ -107,7 +109,7 @@ def main():
         if DEBUG == True:
             print ("\t [debug] Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
-        captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"] ,currCamSlot)
+        captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot)
         if DEBUG == True:
             print ('\t [debug] Taking photo and saving to path ' + filepath)
 

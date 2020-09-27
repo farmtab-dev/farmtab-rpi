@@ -52,6 +52,10 @@ def changeCam(cam):
         gp.output(12, False)
 
 
-def captureImg(filepath,width, height, cam):
-    cmd = "raspistill  -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
+def captureImg(filepath,width, height,rotate, cam):
+    if (rotate):
+        cmd = "raspistill  -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
+    else:
+        cmd = "raspistill  -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
+
     os.system(cmd)
