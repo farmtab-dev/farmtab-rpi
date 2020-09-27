@@ -76,6 +76,44 @@ print_camera_config() {
     printf "\n=============================================\n"
 }
 
+print_cam_tune_menu() {
+    printf "\n=============================================\n"
+    if [ $1 -eq 0 ]; then
+        echo -en "MAIN MENU\n"
+    else
+        printf "\n\n"
+    fi
+    printf "\n------------------------\n"
+
+
+    echo -en " 1 - Tune Camera Parameters\n"
+    echo -en " 2 - View camera config \n"
+    echo -en " 3 - Preview \n"
+    echo -en " 4 - Exit \n"
+    if [ -z "${TOTAL_CAM}" ]; then
+        echo -en "${BRED}No ArduCam configuration${NC}\n"
+    else 
+        
+        echo -en " Total Cameras   : ${BGWHITE}${TOTAL_CAM}${NC}\n"
+        echo -en " ArduCam slot :-\n"
+        echo -en "    > Level 1    : ${BGWHITE}${CAM_SLOT_LVL1}${NC}"
+        echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL1}${NC})\n"
+        if [ $TOTAL_CAM -ge 2 ]; then
+            echo -en "    > Level 2    : ${BGWHITE}${CAM_SLOT_LVL2}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL2}${NC})\n"
+        fi
+        if [ $TOTAL_CAM -ge 3 ]; then
+            echo -en "    > Level 3    : ${BGWHITE}${CAM_SLOT_LVL3}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL3}${NC})\n"
+        fi
+        if [ $TOTAL_CAM -ge 4 ]; then
+            echo -en "    > Level 4    : ${BGWHITE}${CAM_SLOT_LVL4}${NC}"
+            echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL4}${NC})\n"
+        fi
+    fi
+    printf "\n=============================================\n"
+}
+
 promptyn () {
     while true; do
         read -p "$1 " yn
@@ -171,7 +209,7 @@ check_emp_cam_config(){
 #     done
 # }
 
-promptNum () {
+promptCameraNum () {
     while true; do
         read -p ">> Number of camera connected :- " num
         case $num in
@@ -337,7 +375,7 @@ setup_camera_config(){
     # echo -en "\n${BGWHITE}Camera position :- ${NC} ${RWhite}[ INFO! : Input L/R ]${NC}\n"
     # promptlr 
     echo -en "\n${BGWHITE}Total camera :- ${NC} ${RWhite}[ INFO! : Input 1 ~ 4 ]${NC}\n"
-    promptNum 
+    promptCameraNum 
     #if promptyn "Are you using ArduCam? [Y/N]"; then
         echo -en "\n${BGWHITE}ArduCam slot setting :-${NC} ${RWhite}[ INFO! : Input A,B,C or D ]${NC}\n"
         reset_arducam_setting
