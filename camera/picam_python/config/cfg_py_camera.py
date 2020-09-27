@@ -14,14 +14,13 @@ FILE_CFG = {
     "dirpath":  os.environ.get('ORG_NAME', 'images'),
     "imgfile_ext": '.jpg',
 }
-
 IMG_CFG= {
-    "width": 640,
-    "height": 480
+    "width": 320,
+    "height": 240
 }
 image_settings= {
-    "horizontal_res": 640,
-    "vertical_res": 480,
+    "horizontal_res": 320,
+    "vertical_res": 240,
     "file_name": 'test',
     "file_extension": '.jpg',
     "folder_name": 'images',

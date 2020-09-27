@@ -55,14 +55,14 @@ def join_images_vertically(*column, bg_color=(0, 0, 0), alignment=(0.5, 0.5)):
 def getExistImgFilepath(fp,img_size):
     return  Image.open(fp) if   os.path.exists(fp) else Image.new('RGBA', img_size, (255,255,255,0))
 
-def get4X4ImgMerged(dirpath, filepath_A, filepath_B, filepath_C, filepath_D):
-    img_size = Image.open(filepath_A).size
+def get4X4ImgMerged(img_cfg, file_cfg):
+    img_size = (img_cfg["width"], img_cfg["height"])
     print(img_size) # https://www.tutorialspoint.com/python_pillow/python_pillow_imagedraw_module.htm
     images = [
-        [getExistImgFilepath(filepath_A,img_size), getExistImgFilepath(filepath_B,img_size)],
-        [getExistImgFilepath(filepath_C,img_size), getExistImgFilepath(filepath_D,img_size)],
+        [getExistImgFilepath(file_cfg["fpA"],img_size), getExistImgFilepath(file_cfg["fpB"],img_size)],
+        [getExistImgFilepath(file_cfg["fpC"],img_size), getExistImgFilepath(file_cfg["fpD"],img_size)],
     ]
-    fp = dirpath + '/' + "COMBINED.png"
-    join_images(*images, bg_color='green', alignment=(1, 1)).save(fp)
+    fp = file_cfg["dirpath"] + '/' + "COMBINED.png"
+    join_images(*images, bg_color='grey', alignment=(1, 1)).save(fp)
     print(fp)
     return fp
