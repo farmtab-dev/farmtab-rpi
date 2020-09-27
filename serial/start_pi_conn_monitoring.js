@@ -1,7 +1,7 @@
 /*============
  *  IMPORTS
  *============*/
-const SimpleNodeLogger = require("simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
+const SimpleNodeLogger = require("../camera/DRAFT/cam_preview/node_modules/simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
 const io = require('socket.io-client');
 const path = require('path');
 const pm2 = require('pm2');

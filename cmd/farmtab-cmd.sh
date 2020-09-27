@@ -9,7 +9,6 @@ load_latest_env_var(){
     source /opt/farmtab-rpi/cmd/farmtab-env-cfg  # Run the latest environment variable
     source /opt/farmtab-rpi/cmd/farmtab-env-serial  
     source /opt/farmtab-rpi/cmd/farmtab-env-camera  
-    # source /opt/farmtab-rpi/cmd/farmtab-env-cam-rotate 
 }
 
 print_help(){
