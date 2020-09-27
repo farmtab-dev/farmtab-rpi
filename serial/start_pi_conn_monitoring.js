@@ -1,7 +1,7 @@
 /*============
  *  IMPORTS
  *============*/
-const SimpleNodeLogger = require("../camera/DRAFT/cam_preview/node_modules/simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
+const SimpleNodeLogger = require("simple-node-logger"); // https://www.npmjs.com/package/simple-node-logger
 const io = require('socket.io-client');
 const path = require('path');
 const pm2 = require('pm2');
@@ -9,8 +9,8 @@ const mqtt = require("mqtt"); // https://www.npmjs.com/package/mqtt
 /*-----------------
  *  CUSTOM IMPORTS
  *-----------------*/
-const CONFIG = require("../camera/config/cfg_js_server");
-const FARMTAB_SERIAL = require("../camera/config/cfg_js_serial").farmtab;
+const CONFIG = require("../cmd/config/cfg_js_server");
+const FARMTAB_SERIAL = require("../cmd/config/cfg_js_serial").farmtab;
 
 var PM2_OBJ = {
     script: []
