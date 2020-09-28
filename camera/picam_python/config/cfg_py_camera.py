@@ -10,6 +10,7 @@ TIME_INTERVAL = {
 #SEND_IMG_HOUR = [6, 9, 12, 15];
 # SEND_IMG_HOUR = [5, 7, 13, 15, 21, 23];
 SEND_IMG_HOUR = [7, 10, 13, 16];  # Normal
+# SEND_IMG_HOUR = [0,1,2,7, 10, 13, 16];  # Normal
 FILE_CFG = {
     "dirpath":  os.environ.get('ORG_NAME', 'images'),
     "imgfile_ext": '.jpg',
@@ -46,10 +47,10 @@ S3_CFG = {
 
 TOTAL_CAM=os.environ.get('TOTAL_CAM', "0")
 CAM_NEED_ROTATE = { # TO_CHANGE: Camera rotation for (1)
-    'lvl1': os.environ.get("CAM_ROTATE_LVL1",False),
-    'lvl2': os.environ.get("CAM_ROTATE_LVL2",False),
-    'lvl3': os.environ.get("CAM_ROTATE_LVL3",False),
-    'lvl4': os.environ.get("CAM_ROTATE_LVL4",False),
+    'lvl1': os.environ.get("CAM_ROTATE_LVL1","NO")=="YES",
+    'lvl2': os.environ.get("CAM_ROTATE_LVL2","NO")=="YES",
+    'lvl3': os.environ.get("CAM_ROTATE_LVL3","NO")=="YES",
+    'lvl4': os.environ.get("CAM_ROTATE_LVL4","NO")=="YES",
 }
 if(TOTAL_CAM=="4" or TOTAL_CAM==4):
     CAM_SLOT_OBJ = {

@@ -51,7 +51,7 @@ def changeCam(cam):
         gp.output(11, True)
         gp.output(12, False)
 
-
+# https://www.raspberrypi.org/forums/viewtopic.php?t=56086
 def captureImg(filepath,width, height,rotate, cam):
     if (rotate):
         cmd = "raspistill  -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
