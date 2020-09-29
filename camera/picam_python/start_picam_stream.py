@@ -98,7 +98,7 @@ def main():
         # Set curr Camera Slot
         camLvl = CAM_SLOT_LIST[i]
         currCamSlot = CAM_SLOT_OBJ[camLvl]
-        print ("\nCurrent [ " + camLvl + " ] camera - [ Slot_" + currCamSlot + " ] - Rotate - "+CAM_NEED_ROTATE[camLvl])
+        print ("\nCurrent [ " + camLvl + " ] camera - [ Slot_" + currCamSlot + " ] - Rotate - "+str(CAM_NEED_ROTATE[camLvl]))
 
         # Build filename string
         filepath =getCamFilepath(i)
