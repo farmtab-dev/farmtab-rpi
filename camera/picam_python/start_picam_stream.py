@@ -14,7 +14,7 @@ import schedule  # https://pypi.org/project/schedule/
 # s3_client = boto3.client('s3')
 from func.h_img_join_func import get4X4ImgMerged
 from func.h_arducam_func import changeCam, captureImg
-from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR,TIME_INTERVAL, DEBUG, S3_CFG,FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE
+from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR, TIME_INTERVAL, DEBUG, S3_CFG, FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE, CAP_TIMEOUT
 
 # photo props
 # image_width = cfg['image_settings']['horizontal_res']
@@ -110,7 +110,7 @@ def main():
         if DEBUG == True:
             print ("\t [debug] Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
-        captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot)
+        captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot, CAP_TIMEOUT)
         if DEBUG == True:
             print ('\t [debug] Taking photo and saving to path ' + filepath)
 
