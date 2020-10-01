@@ -13,6 +13,7 @@ PUMP_PIN = {
     'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
     'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
     'pinB': 6,     # 22 (WiringPin) - B fertilizer 
+    'all': [5,6,22]
 }
 
 # Threshold 

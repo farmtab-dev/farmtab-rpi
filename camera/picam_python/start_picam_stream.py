@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#### pip3 install -r requirements.txt
 from datetime import datetime
 from time import sleep
 import os
@@ -7,10 +8,10 @@ import tinys3
 
 import schedule  # https://pypi.org/project/schedule/
 #import yaml  # pip install pyyaml https://github.com/yaml/pyyaml/issues/291
-import boto3
+# import boto3
 
-# client = boto3.client('kinesisvideo')
-s3_client = boto3.client('s3')
+# # client = boto3.client('kinesisvideo')
+# s3_client = boto3.client('s3')
 from func.h_img_join_func import get4X4ImgMerged
 from func.h_arducam_func import changeCam, captureImg
 from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR,TIME_INTERVAL, DEBUG, S3_CFG,FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE

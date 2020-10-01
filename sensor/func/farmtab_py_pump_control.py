@@ -13,7 +13,40 @@ def deactivate_usb_port():
     #os.system("sudo echo '1-1' > '/sys/bus/usb/drivers/usb/unbind'")
     return subprocess.getoutput("sudo echo '1-1' > '/sys/bus/usb/drivers/usb/unbind'")
 
+#=========================#
+# GPIO control with relay #
+#=========================#
+def control_pump_via_gpioV2(pump_type, action):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    if (pump_type == "RESET"):
+        GPIO.setup(PUMP_PIN["pinA"],GPIO.OUT)
+        GPIO.setup(PUMP_PIN["pinB"],GPIO.OUT)
+        GPIO.setup(PUMP_PIN["pinW"],GPIO.OUT)
+        GPIO.cleanup(PUMP_PIN["all"])
+        print(" >>> Off all pumps - "+str(get_curr_datetime()))
+    elif (pump_type == "WATER"):
+        GPIO.setup(PUMP_PIN["pinW"],GPIO.OUT)
+        if (action == "ON"):
+            print ("ON WATER_PUMP - "+str(get_curr_datetime()))
+            GPIO.output(PUMP_PIN["pinW"],GPIO.LOW)
+        else:
+            print ("OFF WATER_PUMP - "+str((get_curr_datetime())))
+            GPIO.cleanup(PUMP_PIN["pinW"])
+    elif (pump_type == "FER"):
+        GPIO.setup(PUMP_PIN["pinA"],GPIO.OUT)
+        GPIO.setup(PUMP_PIN["pinB"],GPIO.OUT)
+        if (action == "ON"):
+            print ("ON FERTILILZER_PUMP - "+str(get_curr_datetime()))
+            GPIO.output(PUMP_PIN["pinA"],GPIO.LOW)
+            GPIO.output(PUMP_PIN["pinB"],GPIO.LOW)
+        else:
+            print ("OFF FERTILILZER_PUMP - "+str(get_curr_datetime()))
+            GPIO.cleanup([PUMP_PIN["pinA"], PUMP_PIN["pinB"]])
 
+#==============================#
+# GPIO control with USB module #
+#==============================#
 def control_pump_via_gpio(pump_type, action):
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
