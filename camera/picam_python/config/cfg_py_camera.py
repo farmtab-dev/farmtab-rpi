@@ -3,7 +3,7 @@ import os
 #  IMAGE RELATED CONFIG  # 
 #=====================================#  
 DEBUG=True
-CAP_TIMEOUT = 3000
+CAP_TIMEOUT = 10000
 TIME_INTERVAL = {
     "chg_cam": os.environ.get('INTERVAL_CHG_CAM', 15),
     "cap_img": os.environ.get('INTERVAL_CAP_IMG', 15)
