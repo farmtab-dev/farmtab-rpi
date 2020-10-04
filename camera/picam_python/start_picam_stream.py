@@ -127,11 +127,11 @@ def main():
             print("Updated all camera stream - ", datetime.now())
             i=0
             # Upload ALL CAM to S3
-            # if (datetime.now().minute in [25]):
-            #     fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
-            #     "dirpath": FILE_CFG["dirpath"],
-            #     "fpA": getCamFilepath(0), "fpB":getCamFilepath(1), "fpC":getCamFilepath(2), "fpD":getCamFilepath(3)})
-            #     uploadToS3(fp, "COMBINED", getCombinedDesc())
+            if (datetime.now().minute in []):
+                fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
+                "dirpath": FILE_CFG["dirpath"],
+                "fpA": getCamFilepath(0), "fpB":getCamFilepath(1), "fpC":getCamFilepath(2), "fpD":getCamFilepath(3)})
+                uploadAllToS3()
 
         sleep(TIME_INTERVAL["chg_cam"])
 
