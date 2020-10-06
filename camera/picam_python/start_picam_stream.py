@@ -31,6 +31,13 @@ CAM_POSITION = "left_cam"
 if not os.path.exists(FILE_CFG["dirpath"]):
     os.makedirs(FILE_CFG["dirpath"])
 
+
+def get_curr_datetime():
+    # --> https://stackoverflow.com/questions/25837452/python-get-current-time-in-right-timezone
+    utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
+    # local time
+    return datetime.datetime.strftime(utc_dt.astimezone(), "%Y-%m-%d %H:%M:%S%z")
+
 def getCombinedDesc():
     res_str =""
     for x in CAM_SLOT_LIST:
@@ -50,6 +57,7 @@ def uploadToS3(filepath,cam_lvl, cam_slot):
             'x-amz-meta-farmtab-serial-number': CAM_SERIAL,
             'x-amz-meta-farmtab-cam-position': CAM_POSITION,
             'x-amz-meta-farmtab-cam-slot': cam_slot,
+            'x-amz-meta-farmtab-cam-datetime': get_curr_datetime(),
             'x-amz-meta-farmtab-img-coordinate-code': cam_lvl
             })
     print (t)
