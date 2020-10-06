@@ -11,7 +11,7 @@ TIME_INTERVAL = {
 #SEND_IMG_HOUR = [6, 9, 12, 15];
 # SEND_IMG_HOUR = [5, 7, 13, 15, 21, 23];
 SEND_IMG_HOUR = [7, 10, 13, 16];  # Normal
-# SEND_IMG_HOUR = [0,1,2,7, 10, 13, 16];  # Normal
+# SEND_IMG_HOUR = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];  # Normal
 FILE_CFG = {
     "dirpath":  os.environ.get('ORG_NAME', 'images'),
     "imgfile_ext": '.jpg',
