@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #### pip3 install -r requirements.txt
-from datetime import datetime
+import datetime
 from time import sleep
 import os
 import tinys3
@@ -79,10 +79,10 @@ def uploadToS3(filepath,cam_lvl, cam_slot):
 
 
 def uploadAllToS3():
-    if (datetime.now().hour not in SEND_IMG_HOUR):
-        print("INFO - NOT UPLOAD TIME YET - ",datetime.now())
+    if (datetime.datetime.now().hour not in SEND_IMG_HOUR):
+        print("INFO - NOT UPLOAD TIME YET - ",datetime.datetime.now())
         return
-    print ("INFO - UPLOADING to S3 ", datetime.now())
+    print ("INFO - UPLOADING to S3 ", datetime.datetime.now())
     # for x in CAM_SLOT_LIST:  
     #     f = FILE_CFG["dirpath"] + '/'+ x + FILE_CFG["imgfile_ext"] 
     for i in range(len(CAM_SLOT_LIST)):
@@ -132,10 +132,10 @@ def main():
         # sleep
         i+=1
         if (i>=len(CAM_SLOT_LIST)):  
-            print("Updated all camera stream - ", datetime.now())
+            print("Updated all camera stream - ", datetime.datetime.now())
             i=0
             # Upload ALL CAM to S3
-            if (datetime.now().minute in []):
+            if (datetime.datetime.now().minute in []):
                 fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
                 "dirpath": FILE_CFG["dirpath"],
                 "fpA": getCamFilepath(0), "fpB":getCamFilepath(1), "fpC":getCamFilepath(2), "fpD":getCamFilepath(3)})

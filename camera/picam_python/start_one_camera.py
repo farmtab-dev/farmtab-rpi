@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #### pip3 install -r requirements.txt
-from datetime import datetime
+import datetime
 from time import sleep
 import os
 import tinys3
@@ -59,11 +59,11 @@ def uploadToS3(filepath,cam_lvl, cam_slot):
 
 
 def uploadAllToS3():
-    if (datetime.now().hour not in SEND_IMG_HOUR):
-        print("INFO - NOT UPLOAD TIME YET - ",datetime.now())
+    if (datetime.datetime.now().hour not in SEND_IMG_HOUR):
+        print("INFO - NOT UPLOAD TIME YET - ",datetime.datetime.now())
         return
 
-    print ("INFO - UPLOADING to S3 ", datetime.now())
+    print ("INFO - UPLOADING to S3 ", datetime.datetime.now())
 
     camLvl = CAM_SLOT_LIST[0]
     uploadToS3(getCamFilepath(0),camLvl.upper(), CAM_SLOT_OBJ[camLvl])
@@ -90,7 +90,7 @@ def main():
         sleep(TIME_INTERVAL["cap_img"])
         captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot, CAP_TIMEOUT)
         if DEBUG == True:
-            print ('\t [debug] Taking photo and saving to path ' + filepath+"_"+str(datetime.now()))
+            print ('\t [debug] Taking photo and saving to path ' + filepath+"_"+str(datetime.datetime.now()))
 
 main()
 
