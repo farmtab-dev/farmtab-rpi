@@ -4,7 +4,7 @@
 import requests
 import json
 from config.cfg_py_server import API_SERVER_URL
-from config.cfg_farmtab_parameter import DEFAULT_THRESHOLD
+from config.cfg_py_sensor import DEFAULT_THRESHOLD
 from func.farmtab_py_threshold import update_thresholds
 #headers = {'Content-Type': 'application/json',
 #           'Authorization': 'Bearer {0}'.format(api_token)}

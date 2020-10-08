@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from config.cfg_py_serial import SEN_SERIAL
+from config.cfg_py_sensor import SEN_SERIAL
 from func.h_conversion_func import encode_obj_to_json
 from func.h_datetime_func import get_curr_datetime
 

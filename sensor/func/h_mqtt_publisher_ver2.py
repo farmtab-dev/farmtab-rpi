@@ -11,8 +11,7 @@ import time
 import schedule  # https://pypi.org/project/schedule/
 import serial  # https://pyserial.readthedocs.io/en/latest/shortintro.html
 import config.cfg_py_server as CPS
-import config.cfg_farmtab_parameter as CFP
-from config.cfg_py_serial import SEN_SERIAL
+import config.cfg_py_sensor as CFP
 from func.mqtt_pub_msg_handler import  get_pub_sensor_data, tune_parameter, check_thres_pub_sensor_data, get_store_sensor_data
 from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
 from func.farmtab_py_pump_control import control_pump_via_gpio
@@ -210,8 +209,8 @@ def mqtt_main(comm_with, topic_list):
     print("Total MQTT topic to subscribe : " + str(len(SUBSCRIBE_TOPIC)))
     print("Topic to subscribe : " + str(len(SUBSCRIBE_TOPIC)))
 
-    client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"-"+str(comm_with))
-    l_client = mqtt.Client(client_id= "RPi_"+SEN_SERIAL+"- local")
+    client = mqtt.Client(client_id= "RPi_"+CFP.SEN_SERIAL+"-"+str(comm_with))
+    l_client = mqtt.Client(client_id= "RPi_"+CFP.SEN_SERIAL+"- local")
 
     #-----------------------------#
     # MQTT Authentication Method  #
@@ -257,7 +256,7 @@ def mqtt_main(comm_with, topic_list):
     #---------------#  Get ShelfID - To ensure it is assigned
     # RUN API CALLS #  Get Threshold - If not set, add one
     #---------------#
-    need_resync = sync_cloud_thres_info(SEN_SERIAL, THRESHOLD_DICT) 
+    need_resync = sync_cloud_thres_info(CFP.SEN_SERIAL, THRESHOLD_DICT) 
     last_resync_check = None
     
     #--------------------#
@@ -283,7 +282,7 @@ def mqtt_main(comm_with, topic_list):
                 if (time_elapse < 300): 
                     continue
             last_resync_check = get_curr_datetime()
-            need_resync = sync_cloud_thres_info(SEN_SERIAL, THRESHOLD_DICT) 
+            need_resync = sync_cloud_thres_info(CFP.SEN_SERIAL, THRESHOLD_DICT) 
         # else:
         #     # schedule.run_pending()
                         

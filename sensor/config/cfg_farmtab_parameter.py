@@ -63,19 +63,6 @@ THRESHOLD_DICT = {
 #     # "orp_max": 500
 # }
 
-PUB_TOPIC_LIST = {
-    0: "/training/Pump/temp",
-    1: "/training/Pump/rpms"
-}
-MESSAGE_OBJ_LIST = {
-    0: {"SensorId": "tempSensor", "Temp": 0, "Time": ""},
-    1: {"SensorId": "rpmsSensor", "RPMS": 0, "Time": ""}
-}
-NEXT_PUB_DELAY = 5
-FAIL_PUMP = [4, 5]
-NORMAL_RANGE = {0: {"min": 0, "max": 200}, 1: {"min": 2000, "max": 4250}}
-ABNORMAL_RANGE = {0: {"min": 200, "max": 250}, 1: {"min": 4251, "max": 4500}}
-
 VARIABLE_ID = {
      'gateway_id' : '@GATEWAY@',
      'control_id' : '@CTRL_ID@',

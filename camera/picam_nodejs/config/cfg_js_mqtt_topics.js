@@ -1,5 +1,4 @@
-var CONFIG = require("./cfg_js_server");
-var SERIAL = require("./cfg_js_serial");
+var FARMTAB_SERIAL = process.env.FARMTAB_SERIAL || ""; // TO_CHANGE
 
 var config = {};
 
@@ -34,7 +33,7 @@ config.topic = {
 
 // CLOUD - Subscribe topic - To Gateway
 config.sub = {
-    SUB_CLOUD_CMD: config.topic.CLOUD_CMD_HEADER + SERIAL.sensor,
+    SUB_CLOUD_CMD: config.topic.CLOUD_CMD_HEADER + FARMTAB_SERIAL,
 
     SUB_GATEWAY_DATA: config.topic.CLOUD_DATA_HEADER + "#", // GATEWAY_ID
     SUB_GATEWAY_IMG: config.topic.CLOUD_IMG_HEADER + "#", // GATEWAY_ID / CM_ID
@@ -45,7 +44,7 @@ config.sub = {
 };
 
 config.pub = {
-    PUB_CLOUD_CMD_REPLY: config.topic.CLOUD_CMD_REPLY_HEADER + SERIAL.sensor, // GATEWAY_ID / DEV_ID
+    PUB_CLOUD_CMD_REPLY: config.topic.CLOUD_CMD_REPLY_HEADER + FARMTAB_SERIAL, // GATEWAY_ID / DEV_ID
 
     PUB_SELF_CMD_REPLY: config.topic.SELF_CMD_REPLY_HEADER + config.PI_LEVEL, // GATEWAY_ID / DEV_ID
     PUB_SELF_CMD: config.topic.SELF_CMD_REPLY_HEADER + config.PI_LEVEL, // GATEWAY_ID / DEV_ID

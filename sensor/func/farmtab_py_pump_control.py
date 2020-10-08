@@ -2,9 +2,12 @@
 import subprocess
 import os
 import RPi.GPIO as GPIO
-from config.cfg_farmtab_parameter import PUMP_PIN
+from config.cfg_py_sensor import PUMP_PIN
 from func.h_datetime_func import get_curr_datetime
 
+#================#
+# PI USB control #
+#================#
 def activate_usb_port():
     #os.system("sudo echo '1-1' > '/sys/bus/usb/drivers/usb/bind'")
     return subprocess.getoutput("sudo echo '1-1' > '/sys/bus/usb/drivers/usb/bind'")
