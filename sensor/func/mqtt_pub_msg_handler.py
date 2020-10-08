@@ -1,5 +1,5 @@
 from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC, PI_TUNING_HEADER
-from config.cfg_py_sensor import SEN_SERIAL
+from config.cfg_py_sensor import SEN_SERIAL, SEND_DATA_HOUR
 from func.farmtab_data_retrieval import prepare_sensor_data_obj_main, get_prev_data, prepare_pub_sensor_data
 from func.farmtab_py_msg_prep import prepare_usb_notification_message_obj, prepare_thres_notification_message_obj
 from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, pump_ctrl
@@ -36,7 +36,7 @@ def get_store_sensor_data(client, pub_time_dict, curr_pump_stat, arduino_input):
 
 
 def check_thres_pub_sensor_data(client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOLD_DICT):
-    if (get_hour() not in [0, 3, 6, 9, 12, 15, 18, 21]):
+    if (get_hour() not in SEND_DATA_HOUR):
         print("\n\nFATAL_INFO - NOT THE TIME YET - "+get_curr_datetime())
         return
     print("\n\nINFO - "+get_curr_datetime())

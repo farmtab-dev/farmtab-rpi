@@ -24,7 +24,7 @@ PUMP_PIN = {
 #=====================================#
 SEN_SERIAL = os.environ.get('FARMTAB_SERIAL', "")
 
-
+SEND_DATA_HOUR = [0, 3, 6, 9, 12, 15, 18, 21]
 
 # Threshold 
 DEFAULT_THRESHOLD = {
