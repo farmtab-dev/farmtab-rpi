@@ -22,9 +22,9 @@ const path = require('path');
 /*-----------------
  *  CUSTOM IMPORTS
  *-----------------*/
-const CONFIG = require("./config/cfg_js_server");
+const CONFIG = require("../../cmd/config/cfg_js_server");
+const CAM_SERIAL = require("../../cmd/config/cfg_js_serial").farmtab;
 const CAMERA = require("./config/cfg_js_camera");
-const CAM_SERIAL = require("./config/cfg_js_serial").camera;
 const TIME_CFG = require("./config/cfg_js_time");
 
 log = SimpleNodeLogger.createSimpleLogger(CONFIG.log.video_opts);

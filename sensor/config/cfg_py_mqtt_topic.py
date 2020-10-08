@@ -1,4 +1,5 @@
-from config.cfg_py_serial import SEN_SERIAL
+import os
+SEN_SERIAL = os.environ.get('FARMTAB_SERIAL', "")
 
 #===================#  IF PUBLISH : SPECIFY ID/Serial Num.
 # MQTT TOPIC CONFIG #  IF SUBSCRIBE : USE #

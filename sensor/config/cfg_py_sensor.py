@@ -1,3 +1,4 @@
+import os
 ARDUINO_BRAUD_RATE = 9600         #BRAUD RATE for arduino Code
 PUB_DATA_INTERVAL_IN_SEC = 3600000         # Waiting time before next publish
 STORE_DATA_INTERVAL_IN_SEC = 300         # Waiting time before next storage
@@ -8,13 +9,20 @@ CURR_PUMP_STAT = {
     "FER":False
 }
 # sudo nano /boot/config.txt https://www.raspberrypi.org/documentation/configuration/config-txt/gpio.md
-    # gpio=5,6,22=op,dl
+# gpio=5,6,22=op,dl
 PUMP_PIN = {
     'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
     'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
     'pinB': 6,     # 22 (WiringPin) - B fertilizer 
     'all': [5,6,22]
 }
+
+#=====================================#  !IMPORTANT : Serial Number is unique globally
+#  RASPBERRY PI Serial Number CONFIG  #
+#=====================================#
+SEN_SERIAL = os.environ.get('FARMTAB_SERIAL', "")
+
+
 
 # Threshold 
 DEFAULT_THRESHOLD = {
