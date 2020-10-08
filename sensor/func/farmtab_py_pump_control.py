@@ -2,8 +2,18 @@
 import subprocess
 import os
 import RPi.GPIO as GPIO
-from config.cfg_py_sensor import PUMP_PIN
+from config.cfg_py_sensor import PUMP_PIN, PUMP_CTRL_TYPE
 from func.h_datetime_func import get_curr_datetime
+
+
+def pump_ctrl(pump_type, action):
+    if(PUMP_CTRL_TYPE=="USB"):
+        control_pump_via_usb(pump_type, action)
+    elif(PUMP_CTRL_TYPE=="GPIO"):
+        control_pump_via_gpio(pump_type, action)
+    elif(PUMP_CTRL_TYPE == "PI_USB"):
+        activate_usb_port()
+        deactivate_usb_port()
 
 #================#
 # PI USB control #
@@ -19,7 +29,7 @@ def deactivate_usb_port():
 #=========================#
 # GPIO control with relay #
 #=========================#
-def control_pump_via_gpioV2(pump_type, action):
+def control_pump_via_gpio(pump_type, action):
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     if (pump_type == "RESET"):
@@ -50,7 +60,7 @@ def control_pump_via_gpioV2(pump_type, action):
 #==============================#
 # GPIO control with USB module #
 #==============================#
-def control_pump_via_gpio(pump_type, action):
+def control_pump_via_usb(pump_type, action):
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     if (pump_type == "RESET"):

@@ -8,6 +8,8 @@ CURR_PUMP_STAT = {
     "WATER":False,
     "FER":False
 }
+
+PUMP_CTRL_TYPE = "USB" # USB, PI_USB, GPIO
 # sudo nano /boot/config.txt https://www.raspberrypi.org/documentation/configuration/config-txt/gpio.md
 # gpio=5,6,22=op,dl
 PUMP_PIN = {

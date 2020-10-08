@@ -14,7 +14,7 @@ import config.cfg_py_server as CPS
 import config.cfg_py_sensor as CFP
 from func.mqtt_pub_msg_handler import  get_pub_sensor_data, tune_parameter, check_thres_pub_sensor_data, get_store_sensor_data
 from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
-from func.farmtab_py_pump_control import control_pump_via_gpio
+from func.farmtab_py_pump_control import pump_ctrl
 from func.h_api_func import sync_cloud_thres_info
 from func.h_conversion_func import encode_obj_to_json
 
@@ -178,7 +178,7 @@ def readSerialAndPub(client, l_client):
 def mqtt_main(comm_with, topic_list):
     print("\nCommunicate with - "+str(comm_with))
     print("Subscribing MQTT Topic - "+str(topic_list))
-    control_pump_via_gpio("RESET", "OFF")
+    pump_ctrl("RESET", "OFF")
 
 
     global SUBSCRIBE_TOPIC

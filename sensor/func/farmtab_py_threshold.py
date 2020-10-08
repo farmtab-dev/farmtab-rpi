@@ -1,4 +1,4 @@
-from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, control_pump_via_gpio
+from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, pump_ctrl
 from func.h_datetime_func import get_curr_datetime, get_time_difference_in_sec
 from func.farmtab_py_msg_prep import prepare_low_water_notification_message_obj, prepare_gpio_pump_notification_message_obj
 from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC
@@ -54,9 +54,9 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
         else:
             msg_str = prepare_gpio_pump_notification_message_obj("fer", "on", shelf_id)
             mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
-            control_pump_via_gpio("FER", "ON")
+            pump_ctrl("FER", "ON")
             time.sleep(ctrl_time_dict["ctrl_interval"])
-            control_pump_via_gpio("FER", "OFF")
+            pump_ctrl("FER", "OFF")
             # msg_str = prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id)
             # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
         
@@ -69,9 +69,9 @@ def check_threshold(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
         else:
             msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
             mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
-            control_pump_via_gpio("WATER", "ON")
+            pump_ctrl("WATER", "ON")
             time.sleep(ctrl_time_dict["ctrl_interval"])
-            control_pump_via_gpio("WATER", "OFF")
+            pump_ctrl("WATER", "OFF")
             # msg_str = prepare_gpio_pump_notification_message_obj("water", "off", shelf_id)
             # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
             
@@ -94,9 +94,9 @@ def check_threshold_sr(client, ctrl_time_dict, curr_pump_dict, thres_dict, data)
         else:
             msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
             mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
-            control_pump_via_gpio("WATER", "ON")
+            pump_ctrl("WATER", "ON")
             time.sleep(10)  #For squareRoot
-            control_pump_via_gpio("WATER", "OFF")
+            pump_ctrl("WATER", "OFF")
 
     if (data["ec"] <= thres_dict["thres_ec_min"] or data["tds"] <= thres_dict["thres_tds_min"]):
         # if (int(data["fertilizer"]) == 0):
@@ -108,9 +108,9 @@ def check_threshold_sr(client, ctrl_time_dict, curr_pump_dict, thres_dict, data)
         # else:
         msg_str = prepare_gpio_pump_notification_message_obj("fer", "on", shelf_id)
         mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
-        control_pump_via_gpio("FER", "ON")
+        pump_ctrl("FER", "ON")
         time.sleep(ctrl_time_dict["ctrl_interval"])
-        control_pump_via_gpio("FER", "OFF")
+        pump_ctrl("FER", "OFF")
             # msg_str = prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id)
             # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
 
@@ -124,9 +124,9 @@ def check_threshold_sr(client, ctrl_time_dict, curr_pump_dict, thres_dict, data)
         else:
             msg_str = prepare_gpio_pump_notification_message_obj("water", "on", shelf_id)
             mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
-            control_pump_via_gpio("WATER", "ON")
+            pump_ctrl("WATER", "ON")
             time.sleep(ctrl_time_dict["ctrl_interval"])
-            control_pump_via_gpio("WATER", "OFF")
+            pump_ctrl("WATER", "OFF")
             # msg_str = prepare_gpio_pump_notification_message_obj("water", "off", shelf_id)
             # mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_msg'], str(msg_str))
 

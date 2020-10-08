@@ -2,7 +2,7 @@ from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC, PI_TUNING_HEADER
 from config.cfg_py_sensor import SEN_SERIAL
 from func.farmtab_data_retrieval import prepare_sensor_data_obj_main, get_prev_data, prepare_pub_sensor_data
 from func.farmtab_py_msg_prep import prepare_usb_notification_message_obj, prepare_thres_notification_message_obj
-from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, control_pump_via_gpio
+from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, pump_ctrl
 from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format, get_hour, get_time_difference_in_sec
 from func.h_pymongo_func import insert_item
 from func.h_api_func import resync_cloud_thres_info
@@ -13,13 +13,9 @@ import asyncio
 #=================#
 # MQTT PUB Syntax #
 #=================#
-
-
 def mqtt_pub_msg(client, topic, msg):
     client.publish(topic, msg, 0)
-    print(topic)
-    print(msg)
-
+    print(topic, " ", msg)
 
 def get_store_sensor_data(client, pub_time_dict, curr_pump_stat, arduino_input):
     data_obj, data_str = prepare_sensor_data_obj_main(
@@ -79,12 +75,9 @@ def check_thres_pub_sensor_data(client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOL
 #=======================================#
 # Publish only after specified interval #
 #=======================================#
-
-
 def get_pub_sensor_data(client, pub_time_dict, curr_pump_stat, arduino_input):
     # Convert Sensor Data
-    data_obj, data_str = prepare_sensor_data_obj_main(
-        SEN_SERIAL, curr_pump_stat, arduino_input)
+    data_obj, data_str = prepare_sensor_data_obj_main(SEN_SERIAL, curr_pump_stat, arduino_input)
 
     # FOR PUBLISH MESSAGE
     if (pub_time_dict["last_pub"] is not None):
@@ -120,8 +113,6 @@ def tune_parameter(client, mqtt_topic, mqtt_msg_str, curr_parameters):
 #============================#
 #  PERFORM CHECK : On Topic  #
 #============================#
-
-
 def perform_checks_on_mqtt_topic(client, mqtt_topic):
     if(mqtt_topic.startswith(PI_TUNING_HEADER)):
         topic_tokens = mqtt_topic.split("/")
@@ -134,8 +125,6 @@ def perform_checks_on_mqtt_topic(client, mqtt_topic):
 #==========================#
 #  PERFORM CHECK : On Msg  #    [ Basic ]
 #==========================#
-
-
 def parameter_tuning(client, mqtt_msg_str, cmd_action, curr_parameters):
     #-----------#
     #  Interval #
@@ -172,8 +161,6 @@ def parameter_tuning(client, mqtt_msg_str, cmd_action, curr_parameters):
     return curr_parameters
 
 # DISABLED
-
-
 def update_pump_status(client, mqtt_msg_str, curr_parameters):
     generate_msg = False
     #-----------#
