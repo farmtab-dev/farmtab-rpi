@@ -6,8 +6,7 @@ import time
 
 def mqtt_pub_msg(client, topic, msg):
     client.publish(topic, msg, 0)
-    print(topic)
-    print(msg)
+    print(topic, " ", msg)
 
 def update_thresholds(thres_obj, new_thres):
     # TEMPERATURE

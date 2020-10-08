@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 
-from func.h_rand_func import get_rand_num_between
 from func.h_datetime_func import get_curr_datetime_in_utc, get_curr_datetime, get_curr_datetime_without_format
 from func.h_conversion_func import encode_obj_to_json
 from func.h_pymongo_func import find_all_by_query
@@ -45,7 +44,7 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
     for t in data_tokens:
         if ("@" in t):
             d = t.split("@")
-            if (d[1]=="inf"):
+            if (d[1]=="inf" or d[1]=="nan"):
                 continue
             if (d[0]=="TEMP"):
                 res["temp"] = float(d[1])

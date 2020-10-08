@@ -1,5 +1,5 @@
 from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC, PI_TUNING_HEADER
-from config.cfg_py_serial import SEN_SERIAL
+from config.cfg_py_sensor import SEN_SERIAL
 from func.farmtab_data_retrieval import prepare_sensor_data_obj_main, get_prev_data, prepare_pub_sensor_data
 from func.farmtab_py_msg_prep import prepare_usb_notification_message_obj, prepare_thres_notification_message_obj
 from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, control_pump_via_gpio
