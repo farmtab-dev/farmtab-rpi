@@ -9,12 +9,6 @@ def mqtt_pub_cloud_msg(client, msg):
     client.publish(PUB_CLOUD_TOPIC['pub_msg'], str(msg), 0)
     print(PUB_CLOUD_TOPIC['pub_msg'], " ", str(msg))
 
-def print_threshold(data, thres_dict):
-    print("\nCHECK_THRES ==> " +
-          "PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) + "-" + str(thres_dict["thres_ph_max"])+") \t" +
-          "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) + "-" + str(thres_dict["thres_ec_max"])+") \t" +
-          "TDS:" + str(data["tds"]) + "("+str(thres_dict["thres_tds_min"]) + "-" + str(thres_dict["thres_tds_max"])+")")
-
 def update_thresholds(thres_obj, new_thres):
     # TEMPERATURE
     thres_obj["thres_temp_min"] = new_thres["thres_temp_min"]
@@ -31,7 +25,22 @@ def update_thresholds(thres_obj, new_thres):
     # TDS
     thres_obj["thres_tds_min"] = new_thres["thres_tds_min"]
     thres_obj["thres_tds_max"] = new_thres["thres_tds_max"]
+    # Air Temperature
+    thres_obj["thres_air_temperature_min"] = new_thres["thres_air_temperature_min"]
+    thres_obj["thres_air_temperature_max"] = new_thres["thres_air_temperature_max"]
+    # Humidity
+    thres_obj["thres_humidity_min"] = new_thres["thres_humidity_min"]
+    thres_obj["thres_humidity_max"] = new_thres["thres_humidity_max"]
+    # CO2
+    thres_obj["thres_co2_min"] = new_thres["thres_co2_min"]
+    thres_obj["thres_co2_max"] = new_thres["thres_co2_max"]
     print("SUCCESS update threshold - "+ str(thres_obj))
+
+def print_threshold(data, thres_dict):
+    print("\nCHECK_THRES ==> " +
+          "PH:" + str(data["ph"]) + "("+str(thres_dict["thres_ph_min"]) + "-" + str(thres_dict["thres_ph_max"])+") \t" +
+          "EC:" + str(data["ec"]) + "("+str(thres_dict["thres_ec_min"]) + "-" + str(thres_dict["thres_ec_max"])+") \t" +
+          "TDS:" + str(data["tds"]) + "("+str(thres_dict["thres_tds_min"]) + "-" + str(thres_dict["thres_tds_max"])+")")
 
 #====================#
 #  CONDITION CHECKS  #

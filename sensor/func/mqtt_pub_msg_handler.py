@@ -2,7 +2,7 @@ from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC, PI_TUNING_HEADER
 from config.cfg_py_sensor import SEN_SERIAL, SEND_DATA_HOUR
 from func.farmtab_data_retrieval import prepare_sensor_data_obj_main, get_prev_data, prepare_pub_sensor_data
 from func.farmtab_py_msg_prep import prepare_usb_notification_message_obj, prepare_thres_notification_message_obj
-from func.farmtab_py_pump_control import activate_usb_port, deactivate_usb_port, pump_ctrl
+from func.farmtab_py_pump_control import pump_ctrl
 from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format, get_hour, get_time_difference_in_sec
 from func.h_pymongo_func import insert_item
 from func.h_api_func import resync_cloud_thres_info
@@ -168,7 +168,7 @@ def update_pump_status(client, mqtt_msg_str, curr_parameters):
     #-----------#
     if (mqtt_msg_str == "on"):
         print("Activate USB")
-        cmd_output = activate_usb_port()
+        cmd_output = pump_ctrl("PI_USB", "ON")
         print(cmd_output)
         if (cmd_output == ''):
             curr_parameters["pump"]["stat"] = True
@@ -182,7 +182,7 @@ def update_pump_status(client, mqtt_msg_str, curr_parameters):
     #---------------#
     elif(mqtt_msg_str == "off"):
         print("Deactivate USB")
-        cmd_output = deactivate_usb_port()
+        cmd_output = pump_ctrl("PI_USB", "OFF")
         print(cmd_output)
         if (cmd_output == ''):
             curr_parameters["pump"]["stat"] = False

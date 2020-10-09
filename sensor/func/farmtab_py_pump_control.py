@@ -11,9 +11,11 @@ def pump_ctrl(pump_type, action):
         control_pump_via_usb(pump_type, action)
     elif(PUMP_CTRL_TYPE=="GPIO"):
         control_pump_via_gpio(pump_type, action)
-    elif(PUMP_CTRL_TYPE == "PI_USB"):
-        activate_usb_port()
-        deactivate_usb_port()
+    elif(pump_type == "PI_USB"):
+        if(action=="ON"): 
+            return activate_usb_port()
+        elif(action=="OFF"): 
+            return deactivate_usb_port()
 
 #================#
 # PI USB control #
@@ -70,6 +72,7 @@ def control_pump_via_usb(pump_type, action):
         GPIO.output(PUMP_PIN["pinA"],GPIO.LOW)
         GPIO.output(PUMP_PIN["pinB"],GPIO.LOW)
         GPIO.output(PUMP_PIN["pinW"],GPIO.LOW)
+        GPIO.cleanup(PUMP_PIN["all"])
         print(" >>> Off all pumps - "+str(get_curr_datetime()))
     elif (pump_type == "WATER"):
         GPIO.setup(PUMP_PIN["pinW"],GPIO.OUT)
@@ -79,6 +82,7 @@ def control_pump_via_usb(pump_type, action):
         else:
             print ("OFF WATER_PUMP - "+str((get_curr_datetime())))
             GPIO.output(PUMP_PIN["pinW"],GPIO.LOW)
+            GPIO.cleanup([PUMP_PIN["pinW"]])
     elif (pump_type == "FER"):
         GPIO.setup(PUMP_PIN["pinA"],GPIO.OUT)
         GPIO.setup(PUMP_PIN["pinB"],GPIO.OUT)
@@ -90,3 +94,4 @@ def control_pump_via_usb(pump_type, action):
             print ("OFF FERTILILZER_PUMP - "+str(get_curr_datetime()))
             GPIO.output(PUMP_PIN["pinA"],GPIO.LOW)
             GPIO.output(PUMP_PIN["pinB"],GPIO.LOW)
+            GPIO.cleanup([PUMP_PIN["pinA"], PUMP_PIN["pinB"]])

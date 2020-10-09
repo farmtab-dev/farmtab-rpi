@@ -16,7 +16,7 @@ PUMP_PIN = {
     'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
     'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
     'pinB': 6,     # 22 (WiringPin) - B fertilizer 
-    'all': [5,6,22]
+    'all': [5, 6, 22]
 }
 
 #=====================================#  !IMPORTANT : Serial Number is unique globally
@@ -33,6 +33,9 @@ DEFAULT_THRESHOLD = {
         'ph': 0,
         'ec': 0,
         'tds': 0,
+        'co2':0,
+        'air_temperature':0,
+        'humidity': 0,
         'orp': 0
     },
     'max': {
@@ -40,6 +43,9 @@ DEFAULT_THRESHOLD = {
         'ph': 14,
         'ec': 100,
         'tds': 100,
+        'co2': 0,
+        'air_temperature': 100,
+        'humidity': 100,
         'orp': 100
     }
 }
@@ -52,10 +58,14 @@ THRESHOLD_DICT = {
     "thres_ph_max": 14,
     "thres_ec_min": 0,
     "thres_ec_max": 100,
+    "thres_co2_min": 0,
+    "thres_co2_max": 100,
+    "thres_air_temperature_min": 0,
+    "thres_air_temperature_max": 100,
+    "thres_humidity_min": 0,
+    "thres_humidity_max": 100,
     "thres_orp_min": 0,
     "thres_orp_max": 100
-    # "orp_min": 400,
-    # "orp_max": 500
 }
 # https://scienceinhydroponics.com/2017/03/what-is-an-orp-meter-and-why-is-it-useful-in-hydroponics.html
 # THRESHOLD_OBJ_LIST = {
@@ -72,10 +82,3 @@ THRESHOLD_DICT = {
 #     # "orp_min": 400,
 #     # "orp_max": 500
 # }
-
-VARIABLE_ID = {
-     'gateway_id' : '@GATEWAY@',
-     'control_id' : '@CTRL_ID@',
-     'package' : '@PACKAGE@',
-     'action' : '@ACTION@'
-}
