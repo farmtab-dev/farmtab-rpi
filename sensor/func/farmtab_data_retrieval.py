@@ -17,8 +17,8 @@ def prepare_pub_sensor_data(sensor_data):
         "orp": sensor_data["orp"],
         "tds": sensor_data["tds"],
         "co2": sensor_data["co2"],
-        "air_temperature": sensor_data["air_temperature"],
-        "humidity": sensor_data["humidity"],
+        "air_temp": sensor_data["air_temperature"],
+        "humid": sensor_data["humidity"],
         "fertilizer": sensor_data["fertilizer"],
         "water": sensor_data["water"] 
     }
