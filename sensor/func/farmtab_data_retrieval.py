@@ -65,13 +65,13 @@ def prepare_sensor_data_obj_main(serial_number, curr_pump_stat, arduino_input):
                 res["tds"] = float(d[1])
             elif (d[0]=="CO2"):
                 res["co2"] = float(d[1])
-            elif (d[0]=="TEMP_DHT"):
+            elif (d[0]=="AIR_T"):
                 res["air_temperature"] = float(d[1])
-            elif (d[0]=="HUM_DHT"):
+            elif (d[0] == "AIR_H"):
                 res["humidity"] = float(d[1])
-            elif (d[0]=="WLVL1" or d[0]=="W_FER"):
+            elif (d[0]=="WLVL1" or d[0]=="FER_LVL"):
                 res["fertilizer"] = float(d[1])
-            elif (d[0]=="WLVL2" or d[0]=="W_WATER"):
+            elif (d[0]== "WLVL2" or d[0] == "W_LVL"):
                 res["water"] = float(d[1])
 
     print(res)

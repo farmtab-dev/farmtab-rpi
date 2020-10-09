@@ -8,6 +8,8 @@ def get_curr_date():
 #-----------------------#
 def get_hour():
     return datetime.datetime.now().hour
+def get_minute():
+    return datetime.datetime.now().minute
 
 def get_curr_datetime_without_format():
     return datetime.datetime.now()

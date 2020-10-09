@@ -1,9 +1,9 @@
 from config.cfg_py_mqtt_topic import PUB_CLOUD_TOPIC, PI_TUNING_HEADER
-from config.cfg_py_sensor import SEN_SERIAL, SEND_DATA_HOUR
+from config.cfg_py_sensor import SEN_SERIAL, SEND_DATA_HOUR, CHECK_THRES_MINS
 from func.farmtab_data_retrieval import prepare_sensor_data_obj_main, get_prev_data, prepare_pub_sensor_data
 from func.farmtab_py_msg_prep import prepare_usb_notification_message_obj, prepare_thres_notification_message_obj
 from func.farmtab_py_pump_control import pump_ctrl
-from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format, get_hour, get_time_difference_in_sec
+from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format, get_hour, get_minute, get_time_difference_in_sec
 from func.h_pymongo_func import insert_item
 from func.h_api_func import resync_cloud_thres_info
 from func.farmtab_py_threshold import check_threshold, check_threshold_sr
@@ -35,24 +35,53 @@ def get_store_sensor_data(client, pub_time_dict, curr_pump_stat, arduino_input):
     return data_obj
 
 
-def check_thres_pub_sensor_data(client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOLD_DICT):
-    if (get_hour() not in SEND_DATA_HOUR):
-        print("\n\nFATAL_INFO - NOT THE TIME YET - "+get_curr_datetime())
-        return
+def check_exist_sensor(data_obj, data_type):
+    if (data_type in data_obj):
+        return data_obj[data_type]
+    else:
+        return 0
+
+def check_thres_pub_sensor_data(APP_TYPE, client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOLD_DICT):
+    if (APP_TYPE!="WORKSHOP"):
+        if (get_hour() not in SEND_DATA_HOUR):
+            print("\n\nFATAL_INFO - NOT THE TIME YET - "+get_curr_datetime())
+            return
+
     print("\n\nINFO - "+get_curr_datetime())
     #mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], data_str)
     all_data = get_prev_data()
     print(all_data)
-    data_res = {"temp": 0, "ph": 0, "ec": 0,  "orp": 0,
-                "tds": 0, "fertilizer": -1, "water": -1}
+    data_res = {
+        "temp": 0,
+        "ph": 0,
+        "ec": 0,
+        "orp": 0,
+        "tds": 0,
+        "co2": 0,
+        "air_temperature": 0,
+        "humidity": 0,
+        "fertilizer": -1,
+        "water": -1
+    }
+    # data_res = {"temp": 0, "ph": 0, "ec": 0,  "orp": 0,
+    #             "tds": 0, "fertilizer": -1, "water": -1}
 
     if (len(all_data) > 0):
         for data in all_data:
-            data_res['temp'] += data['temp']
-            data_res['ph'] += data['ph']
-            data_res['ec'] += data['ec']
-            data_res['orp'] += data['orp']
-            data_res['tds'] += data['tds']
+            # data_res['temp'] += data['temp']
+            # data_res['ph'] += data['ph']
+            # data_res['ec'] += data['ec']
+            # data_res['orp'] += data['orp']
+            # data_res['tds'] += data['tds']
+            data_res['temp'] += check_exist_sensor(data,'temp')
+            data_res['ph'] += check_exist_sensor(data,'ph')
+            data_res['ec'] += check_exist_sensor(data,'ec')
+            data_res['orp'] += check_exist_sensor(data,'orp')
+            data_res['tds'] += check_exist_sensor(data,'tds')
+            data_res['co2'] += check_exist_sensor(data, 'co2')
+            data_res['air_temperature'] += check_exist_sensor(data, 'air_temperature')
+            data_res['humidity'] += check_exist_sensor(data, 'humidity')
+
 
     print("CALCULATE data_res for ", len(all_data), " data\n", data_res)
     data_res['temp'] /= len(all_data)
@@ -60,14 +89,21 @@ def check_thres_pub_sensor_data(client, CTRL_TIME_DICT, CURR_PUMP_DICT, THRESHOL
     data_res['ec'] /= len(all_data)
     data_res['orp'] /= len(all_data)
     data_res['tds'] /= len(all_data)
+    data_res['co2'] /= len(all_data)
+    data_res['air_temperature'] /= len(all_data)
+    data_res['humidity'] /= len(all_data)
     data_res['fertilizer'] = all_data[-1]["fertilizer"]
     data_res['water'] = all_data[-1]["water"]
     print("SENSOR DATA : ", data_res)
-    check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
-    # check_threshold_sr(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
-    print(CTRL_TIME_DICT, "\n")
-    print(CURR_PUMP_DICT, "\n")
-    print(THRESHOLD_DICT)
+    if (APP_TYPE == "WORKSHOP"):
+        if(get_minute() in CHECK_THRES_MINS):
+            check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
+    elif (APP_TYPE == "SR"):
+        check_threshold_sr(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
+    else:
+        check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
+
+    print(CTRL_TIME_DICT, "\n", CURR_PUMP_DICT, "\n", THRESHOLD_DICT)
     pub_data = prepare_pub_sensor_data(data_res)
     mqtt_pub_msg(client, PUB_CLOUD_TOPIC['pub_data'], str(pub_data))
     # return data_obj
