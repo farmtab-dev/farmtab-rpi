@@ -250,9 +250,10 @@ def mqtt_main(comm_with, topic_list):
     # handles reconnecting.
     # Other loop*() functions are available that give a threaded interface and a
     # manual interface.   
-
-    schedule.every().hour.at(":00").do(check_thres_pub_sensor_data,client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT)
-    # schedule.every().minute.at(":30").do(check_thres_pub_sensor_data,client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT) # For debugging
+    if (CFP.APPLICATION_TYPE == "WORKSHOP"):
+        schedule.every().minute.at(":00").do(check_thres_pub_sensor_data,client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT)
+    else:
+        schedule.every().hour.at(":00").do(check_thres_pub_sensor_data,client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT)
     #---------------#  Get ShelfID - To ensure it is assigned
     # RUN API CALLS #  Get Threshold - If not set, add one
     #---------------#

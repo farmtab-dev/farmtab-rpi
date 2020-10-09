@@ -1,15 +1,20 @@
 import os
-ARDUINO_BRAUD_RATE = 9600         #BRAUD RATE for arduino Code
-PUB_DATA_INTERVAL_IN_SEC = 3600000         # Waiting time before next publish
-STORE_DATA_INTERVAL_IN_SEC = 300         # Waiting time before next storage
-CTRL_INTERVAL_IN_SEC =  2       # Activation time duration
-CHECK_INTERVAL_IN_SEC = 100       # Delay to check threshold 
+#======================================#  
+#  TODO (CHANGE BASED ON APPLICATION)  #
+#======================================#
+APPLICATION_TYPE = os.environ.get('APPLICATION_TYPE', "NORMAL")
+PUMP_CTRL_TYPE = "USB" # USB, PI_USB, GPIO
+SEND_DATA_HOUR = [0, 3, 6, 9, 12, 15, 18, 21]
+
+PUB_DATA_INTERVAL_IN_SEC = 3600000      # Waiting time before next publish
+STORE_DATA_INTERVAL_IN_SEC = 300        # Waiting time before next storage
+CTRL_INTERVAL_IN_SEC =  2               # Pump Activation time duration
+CHECK_INTERVAL_IN_SEC = 100             # Delay to check threshold 
 CURR_PUMP_STAT = {
     "WATER":False,
     "FER":False
 }
 
-PUMP_CTRL_TYPE = "USB" # USB, PI_USB, GPIO
 # sudo nano /boot/config.txt https://www.raspberrypi.org/documentation/configuration/config-txt/gpio.md
 # gpio=5,6,22=op,dl
 PUMP_PIN = {
@@ -19,14 +24,17 @@ PUMP_PIN = {
     'all': [5, 6, 22]
 }
 
-#=====================================#  !IMPORTANT : Serial Number is unique globally
-#  RASPBERRY PI Serial Number CONFIG  #
-#=====================================#
-SEN_SERIAL = os.environ.get('FARMTAB_SERIAL', "")
 
-SEND_DATA_HOUR = [0, 3, 6, 9, 12, 15, 18, 21]
+#========================#
+#  BRAUD, SENSOR SERIAL  #
+#========================#
+ARDUINO_BRAUD_RATE = 9600         #BRAUD RATE for arduino Code
+SEN_SERIAL = os.environ.get('FARMTAB_SERIAL', "")  #!IMPORTANT : Serial Number is unique globally
 
-# Threshold 
+
+#=============#
+#  THRESHOLD  #
+#=============#
 DEFAULT_THRESHOLD = {
     'min': {
         'temperature': 0,
