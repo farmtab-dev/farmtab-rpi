@@ -7,7 +7,7 @@ PUMP_CTRL_TYPE = "USB" # USB, PI_USB, GPIO
 SEND_DATA_HOUR = [0, 3, 6, 9, 12, 15, 18, 21]
 CHECK_THRES_MINS = [0,5,10,15,20,25,30,35,40,45,50,55]
 PUB_DATA_INTERVAL_IN_SEC = 3600000      # Waiting time before next publish
-STORE_DATA_INTERVAL_IN_SEC = 300        # Waiting time before next storage
+STORE_DATA_INTERVAL_IN_SEC = 15 if (APPLICATION_TYPE=="WORKSHOP") else 300     # Waiting time before next storage
 CTRL_INTERVAL_IN_SEC =  2               # Pump Activation time duration
 CHECK_INTERVAL_IN_SEC = 100             # Delay to check threshold 
 CURR_PUMP_STAT = {
