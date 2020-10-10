@@ -17,12 +17,12 @@ FILE_CFG = {
     "imgfile_ext": '.jpg',
 }
 IMG_CFG= {
-    "width": 320,
-    "height": 240
+    "width": 640,
+    "height": 320
 }
 image_settings= {
-    "horizontal_res": 320,
-    "vertical_res": 240,
+    "horizontal_res": 640,
+    "vertical_res": 320,
     "file_name": 'test',
     "file_extension": '.jpg',
     "folder_name": 'images',
