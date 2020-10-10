@@ -17,12 +17,20 @@ CURR_PUMP_STAT = {
 
 # sudo nano /boot/config.txt https://www.raspberrypi.org/documentation/configuration/config-txt/gpio.md
 # gpio=5,6,22=op,dl
-PUMP_PIN = {
-    'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
-    'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
-    'pinB': 6,     # 22 (WiringPin) - B fertilizer 
-    'all': [5, 6, 22]
-}
+if(APPLICATION_TYPE=="WORKSHOP"):
+    PUMP_PIN = {
+        'pinW': 26,    # 3 (WiringPin)  - WATER (Nearest to casing)
+        'pinA': 16,     # 21 (WiringPin) - A fertilizer (Middle)
+        'pinB': 17,     # 22 (WiringPin) - B fertilizer 
+        'all': [17, 16,26]
+    }
+else:
+    PUMP_PIN = {
+        'pinW': 22,    # 3 (WiringPin)  - WATER (Nearest to casing)
+        'pinA': 5,     # 21 (WiringPin) - A fertilizer (Middle)
+        'pinB': 6,     # 22 (WiringPin) - B fertilizer 
+        'all': [5, 6, 22]
+    }
 
 
 #========================#
