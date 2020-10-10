@@ -6,7 +6,7 @@ from func.h_conversion_func import encode_obj_to_json
 from func.h_pymongo_func import find_all_by_query
 import datetime
 #======================#
-#  GET SENSOR READING  #
+#  GET SENSOR READING  #  Follow key_list
 #======================#
 def prepare_pub_sensor_data(sensor_data):
     res = {
