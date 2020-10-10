@@ -95,10 +95,11 @@ def check_thres_pub_sensor_data(APP_TYPE, client, CTRL_TIME_DICT, CURR_PUMP_DICT
     data_res['fertilizer'] = all_data[-1]["fertilizer"]
     data_res['water'] = all_data[-1]["water"]
     print("SENSOR DATA : ", data_res)
-    if (APP_TYPE == "WORKSHOP"):
-        if(get_minute() in CHECK_THRES_MINS):
-            check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
-    elif (APP_TYPE == "SR"):
+    # if (APP_TYPE == "WORKSHOP"):
+    #     if(get_minute() in CHECK_THRES_MINS):
+    #         check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
+    # elif (APP_TYPE == "SR"):
+    if (APP_TYPE == "SR"):
         check_threshold_sr(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
     else:
         check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
