@@ -9,7 +9,8 @@ TIME_INTERVAL = {
     "cap_img": os.environ.get('INTERVAL_CAP_IMG', 300)
 } 
 #SEND_IMG_HOUR = [6, 9, 12, 15]
-SEND_IMG_HOUR = [5, 7, 13, 15, 21, 23]
+# SEND_IMG_HOUR = [5, 7, 13, 15, 21, 23]
+SEND_IMG_HOUR = [9, 11, 13, 15, 17, 19, 21, 23]
 # SEND_IMG_HOUR = [7, 10, 13, 16];  # Normal
 # SEND_IMG_HOUR = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];  # Normal
 FILE_CFG = {
@@ -18,11 +19,11 @@ FILE_CFG = {
 }
 IMG_CFG= {
     "width": 640,
-    "height": 320
+    "height": 480
 }
 image_settings= {
     "horizontal_res": 640,
-    "vertical_res": 320,
+    "vertical_res": 480,
     "file_name": 'test',
     "file_extension": '.jpg',
     "folder_name": 'images',

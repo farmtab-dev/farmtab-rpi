@@ -130,3 +130,19 @@ def check_threshold_sr(client, ctrl_time_dict, curr_pump_dict, thres_dict, data)
         # mqtt_pub_cloud_msg(client, prepare_gpio_pump_notification_message_obj("water", "off", shelf_id))
 
     
+def check_threshold_workshop(client, ctrl_time_dict, curr_pump_dict, thres_dict, data):
+    print_threshold(data,thres_dict)
+
+    shelf_id = thres_dict["shelf_id"]
+    if (trigger_fertilizer(data, thres_dict)):
+        if (int(data["fertilizer"]) == 0):
+            print("\nALERT Cannot trigger fertilizer pump")
+            mqtt_pub_cloud_msg(client, prepare_low_water_notification_message_obj("fer", shelf_id))
+            return
+        else:
+            mqtt_pub_cloud_msg(client, prepare_gpio_pump_notification_message_obj("fer", "on", shelf_id))
+            pump_ctrl("FER", "ON")
+            time.sleep(ctrl_time_dict["ctrl_interval"])
+            pump_ctrl("FER", "OFF")
+            # mqtt_pub_cloud_msg(client,prepare_gpio_pump_notification_message_obj("fer", "off", shelf_id))
+    

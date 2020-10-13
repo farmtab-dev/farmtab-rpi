@@ -6,7 +6,7 @@ from func.farmtab_py_pump_control import pump_ctrl
 from func.h_datetime_func import get_curr_datetime, get_curr_datetime_without_format, get_hour, get_minute, get_time_difference_in_sec
 from func.h_pymongo_func import insert_item
 from func.h_api_func import resync_cloud_thres_info
-from func.farmtab_py_threshold import check_threshold, check_threshold_sr
+from func.farmtab_py_threshold import check_threshold, check_threshold_sr, check_threshold_workshop
 from func.h_conversion_func import encode_obj_to_json
 import os
 import asyncio
@@ -101,6 +101,8 @@ def check_thres_pub_sensor_data(APP_TYPE, client, CTRL_TIME_DICT, CURR_PUMP_DICT
     # elif (APP_TYPE == "SR"):
     if (APP_TYPE == "SR"):
         check_threshold_sr(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
+    elif (APP_TYPE == "WORKSHOP"):
+        check_threshold_workshop(client, CTRL_TIME_DICT,CURR_PUMP_DICT, THRESHOLD_DICT, data_res)
     else:
         check_threshold(client, CTRL_TIME_DICT, CURR_PUMP_DICT,THRESHOLD_DICT, data_res)
 
