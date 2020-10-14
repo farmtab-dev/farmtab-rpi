@@ -121,7 +121,7 @@ def main():
         changeCam(currCamSlot)
         printDebug("Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
-        printDebug("Start Captring")
+        printDebug("Start Capturing")
         captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot, CAP_TIMEOUT)
         printDebug('Taking photo and saving to path ' + filepath +" "+timeNow())
 
