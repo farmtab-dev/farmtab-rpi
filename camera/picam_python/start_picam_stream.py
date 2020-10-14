@@ -31,6 +31,8 @@ CAM_POSITION = "left_cam"
 if not os.path.exists(FILE_CFG["dirpath"]):
     os.makedirs(FILE_CFG["dirpath"])
 
+def timeNow():
+    return datetime.datetime.now()
 
 def get_curr_datetime():
     # --> https://stackoverflow.com/questions/25837452/python-get-current-time-in-right-timezone
@@ -62,8 +64,7 @@ def uploadToS3(filepath,cam_lvl, cam_slot):
             })
     print (t)
 
-    if DEBUG == True:
-        print ('\t [debug] Uploaded ' + filepath + ' to s3 ['+ S3_CFG['bucket_name']+']')
+    printDebug('Uploaded ' + filepath + ' to s3 ['+ S3_CFG['bucket_name']+']')
 # def uploadToS3(filepath):
 #     conn = tinys3.Connection(S3_CFG['access_key_id'], S3_CFG['secret_access_key'])
 #     f = open(filepath, 'rb')
@@ -79,10 +80,10 @@ def uploadToS3(filepath,cam_lvl, cam_slot):
 
 
 def uploadAllToS3():
-    if (datetime.datetime.now().hour not in SEND_IMG_HOUR):
-        print("INFO - NOT UPLOAD TIME YET - ",datetime.datetime.now())
+    if (timeNow().hour not in SEND_IMG_HOUR):
+        print("INFO - NOT UPLOAD TIME YET - ",timeNow())
         return
-    print ("INFO - UPLOADING to S3 ", datetime.datetime.now())
+    print ("INFO - UPLOADING to S3 ", timeNow())
     # for x in CAM_SLOT_LIST:  
     #     f = FILE_CFG["dirpath"] + '/'+ x + FILE_CFG["imgfile_ext"] 
     for i in range(len(CAM_SLOT_LIST)):
@@ -95,6 +96,9 @@ def uploadAllToS3():
     uploadToS3(fp, "COMBINED", getCombinedDesc())
     print ("SUCCESS - DONE UPLOADED") 
 
+def printDebug(msg):
+    if DEBUG == True:
+        print("\t [debug] ", str(msg))
 
 print ("Total Camera :", TOTAL_CAM, " => ",CAM_SLOT_OBJ)
 def main():
@@ -115,12 +119,11 @@ def main():
 
         # Change & Take Photo
         changeCam(currCamSlot)
-        if DEBUG == True:
-            print ("\t [debug] Changed cam slot")
+        printDebug("Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
+        printDebug("Start Captring")
         captureImg(filepath,IMG_CFG["width"],IMG_CFG["height"], CAM_NEED_ROTATE[camLvl] ,currCamSlot, CAP_TIMEOUT)
-        if DEBUG == True:
-            print ('\t [debug] Taking photo and saving to path ' + filepath)
+        printDebug('Taking photo and saving to path ' + filepath +" "+)
 
         # Upload to S3
         #uploadToS3(filepath)
@@ -132,10 +135,10 @@ def main():
         # sleep
         i+=1
         if (i>=len(CAM_SLOT_LIST)):  
-            print("Updated all camera stream - ", datetime.datetime.now())
+            print("Updated all camera stream - ", timeNow())
             i=0
             # Upload ALL CAM to S3
-            if (datetime.datetime.now().minute in []):
+            if (timeNow().minute in []):
                 fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
                 "dirpath": FILE_CFG["dirpath"],
                 "fpA": getCamFilepath(0), "fpB":getCamFilepath(1), "fpC":getCamFilepath(2), "fpD":getCamFilepath(3)})
