@@ -51,9 +51,11 @@ def changeCam(cam):
 # https://www.raspberrypi.org/forums/viewtopic.php?t=56086
 def captureImg(filepath, width, height, rotate, cam, cap_timeout):
     if (rotate):
-        cmd = "raspistill -t "+str(cap_timeout)+" -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
+        cmd = "raspistill -t 0 -s -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
+        # cmd = "raspistill -t "+str(cap_timeout)+" -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
     else:
-        cmd = "raspistill  -t "+str(cap_timeout)+" -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
+        cmd = "raspistill  -t 0 -s -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
+        # cmd = "raspistill  -t "+str(cap_timeout)+" -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
 
     os.system(cmd)
     gp.cleanup()
