@@ -1,8 +1,10 @@
 import RPi.GPIO as gp
 import os
 from time import sleep
-def changeCam(cam):
-    gp.setwarnings(False)
+def changeCam(cam, isInit= False):
+    if (not isInit):
+        gp.cleanup()
+    gp.setwarnings(True)
     gp.setmode(gp.BOARD)
 
     gp.setup(7, gp.OUT)
@@ -47,6 +49,7 @@ def changeCam(cam):
         gp.output(7, True)
         gp.output(11, True)
         gp.output(12, False)
+    
 
 # https://www.raspberrypi.org/forums/viewtopic.php?t=56086
 #https://www.raspberrypi.org/forums/viewtopic.php?t=67175#:~:text=raspistill%20will%20exit%20after%205s,0%22%20to%20disable%20this%20timeout.

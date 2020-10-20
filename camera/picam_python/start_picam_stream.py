@@ -105,6 +105,7 @@ def main():
     schedule.every().hour.at(":00").do(uploadAllToS3)
     # endlessly capture images awwyiss
     i=0
+    isInit = True
     while True:
         schedule.run_pending()
 
@@ -118,7 +119,8 @@ def main():
 
 
         # Change & Take Photo
-        changeCam(currCamSlot)
+        changeCam(currCamSlot, isInit)
+        isInit = False
         printDebug("Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
         printDebug("Start Capturing "  +str(timeNow()))
