@@ -59,6 +59,6 @@ def captureImg(filepath, width, height, rotate, cam, cap_timeout):
         cmd = "raspistill  -t "+str(cap_timeout)+" -o "+ filepath + " -w " +str(width) +" -h "+ str(height)
 
     os.system(cmd)
-    sleep(3)
-    gp.cleanup()
+    # sleep(3)
+    # gp.cleanup()
 
