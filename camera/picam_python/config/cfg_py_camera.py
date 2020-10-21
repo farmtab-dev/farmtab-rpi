@@ -14,7 +14,7 @@ SEND_IMG_HOUR = [9, 11, 13, 15, 17, 19, 21, 23]
 # SEND_IMG_HOUR = [7, 10, 13, 16];  # Normal
 # SEND_IMG_HOUR = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];  # Normal
 FILE_CFG = {
-    "dirpath":  os.environ.get('ORG_NAME', 'images'),
+    "dirpath":  os.environ.get('ORG_NAME', 'images_'+os.environ.get('FARMTAB_SERIAL', "")),
     "imgfile_ext": '.jpg',
 }
 IMG_CFG= {
