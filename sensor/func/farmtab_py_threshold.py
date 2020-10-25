@@ -45,10 +45,23 @@ def print_threshold(data, thres_dict):
 #====================#
 #  CONDITION CHECKS  #
 #====================#
+
+
+def chk_thres(data, thres, isSmaller):
+    if (data <= 0):
+        return False
+    else:
+        if (isSmaller):
+            return data <= thres
+        else:
+            return data >= thres
+
 def trigger_fertilizer(data, thres_dict):
-    return data["ec"] <= thres_dict["thres_ec_min"] or data["tds"] <= thres_dict["thres_tds_min"]
+    # return data["ec"] <= thres_dict["thres_ec_min"] or data["tds"] <= thres_dict["thres_tds_min"]
+    return chk_thres(data["ec"], thres_dict["thres_ec_min"], True) or chk_thres(data["tds"], thres_dict["thres_tds_min"],True)
 def trigger_water(data, thres_dict):
-    return data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] >= thres_dict["thres_ec_max"] or data["tds"] >= thres_dict["thres_tds_max"]
+    # return data["ph"] <= thres_dict["thres_ph_min"] or data["ec"] >= thres_dict["thres_ec_max"] or data["tds"] >= thres_dict["thres_tds_max"]
+    return chk_thres(data["ph"],thres_dict["thres_ph_min"],True) or chk_thres(data["ec"], thres_dict["thres_ec_max"], False) or chk_thres(data["tds"], thres_dict["thres_tds_max"], False)
 
 #===================#
 #  Check THRESHOLD  #
