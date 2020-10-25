@@ -74,14 +74,16 @@ THRESHOLD_DICT = {
     "thres_ph_max": 14,
     "thres_ec_min": 0,
     "thres_ec_max": 100,
-    "thres_co2_min": 0,
-    "thres_co2_max": 100,
+    "thres_orp_min": 0,
+    "thres_orp_max": 100,
+    "thres_tds_min": 0,
+    "thres_tds_max": 100,
     "thres_air_temperature_min": 0,
     "thres_air_temperature_max": 100,
     "thres_humidity_min": 0,
     "thres_humidity_max": 100,
-    "thres_orp_min": 0,
-    "thres_orp_max": 100
+    "thres_co2_min": 0,
+    "thres_co2_max": 100,
 }
 # https://scienceinhydroponics.com/2017/03/what-is-an-orp-meter-and-why-is-it-useful-in-hydroponics.html
 # THRESHOLD_OBJ_LIST = {
