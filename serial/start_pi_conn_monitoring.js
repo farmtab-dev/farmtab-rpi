@@ -14,6 +14,7 @@ const CONFIG = require("../cmd/config/cfg_js_server");
 const FARMTAB_SERIAL = require("../cmd/config/cfg_js_serial").farmtab;
 const ORG_NAME = require("../cmd/config/cfg_js_serial").org_name;
 const CAMERA = require("../cmd/config/cfg_js_camera");
+const NEED_ROTATE = CAMERA.need_rotate;
 
 
 var PM2_OBJ = {
@@ -22,10 +23,30 @@ var PM2_OBJ = {
 
 var CAM_VIEWS = CAMERA.getCamViewList(); // CAM_I2C["camViewList" + CAM_POS];
 var CAM_FEED_DICT = {
-    "lvl1": { cap_time: new Date(), need_rotate: NEED_ROTATE.lvl1 === "YES", img: '', lvl: "LVL1" },
-    "lvl2": { cap_time: new Date(), need_rotate: NEED_ROTATE.lvl2 === "YES", img: '', lvl: "LVL2" },
-    "lvl3": { cap_time: new Date(), need_rotate: NEED_ROTATE.lvl3 === "YES", img: '', lvl: "LVL3" },
-    "lvl4": { cap_time: new Date(), need_rotate: NEED_ROTATE.lvl4 === "YES", img: '', lvl: "LVL4" },
+    "lvl1": {
+        cap_time: new Date(),
+        need_rotate: NEED_ROTATE.lvl1 === "YES",
+        img: '',
+        lvl: "LVL1"
+    },
+    "lvl2": {
+        cap_time: new Date(),
+        need_rotate: NEED_ROTATE.lvl2 === "YES",
+        img: '',
+        lvl: "LVL2"
+    },
+    "lvl3": {
+        cap_time: new Date(),
+        need_rotate: NEED_ROTATE.lvl3 === "YES",
+        img: '',
+        lvl: "LVL3"
+    },
+    "lvl4": {
+        cap_time: new Date(),
+        need_rotate: NEED_ROTATE.lvl4 === "YES",
+        img: '',
+        lvl: "LVL4"
+    },
 };
 
 log = SimpleNodeLogger.createSimpleLogger(CONFIG.log.video_opts);
