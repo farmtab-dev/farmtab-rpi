@@ -572,6 +572,7 @@ update_software(){
         git pull
         printf "${BGREEN}Done${NC}\n"
     fi
+    chown pi:pi /opt/farmtab-rpi/ -R
     cd $temp_pwd
 }
 
