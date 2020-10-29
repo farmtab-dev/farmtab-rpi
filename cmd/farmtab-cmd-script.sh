@@ -565,11 +565,13 @@ update_software(){
     git reset --hard HEAD
     git pull
     printf "${BGREEN}Done${NC}\n"
-    printf "${BYELLOW} Update Arduino source code${NC}\n"
-    cd /home/pi/Arduino/farmtab-arduino
-    git reset --hard HEAD
-    git pull
-    printf "${BGREEN}Done${NC}\n"
+    if [ $APPLICATION_TYPE -ne "WORKSHOP" ]; then
+        printf "${BYELLOW} Update Arduino source code${NC}\n"
+        cd /home/pi/Arduino/farmtab-arduino
+        git reset --hard HEAD
+        git pull
+        printf "${BGREEN}Done${NC}\n"
+    fi
     cd $temp_pwd
 }
 
