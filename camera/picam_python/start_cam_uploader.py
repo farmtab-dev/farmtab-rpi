@@ -111,8 +111,11 @@ print("Total Camera :", TOTAL_CAM, " => ", CAM_SLOT_OBJ)
 
 
 def main():
+
     schedule.every().hour.at(":00").do(uploadAllToS3)
-    schedule.run_pending()
+
+    while True:
+        schedule.run_pending()
 
 
 main()
