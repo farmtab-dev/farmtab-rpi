@@ -330,6 +330,16 @@ function handleCloseCalibration(query_info) {
 }
 
 
+function updateCurrentCamState(state, can_request = false) {
+    socket.emit("publish-camera-state", {
+        serial_num: FARMTAB_SERIAL,
+        state: state,
+        can_request: can_request
+    });
+    console.log("SEND STATE : \n", state);
+}
+
+
 socket.on('request-snapshot', async function(req) {
 
     filename = ORG_NAME + "/LVL1.jpg"

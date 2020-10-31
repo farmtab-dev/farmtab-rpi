@@ -515,6 +515,10 @@ restart_script(){ #$1-"SENSOR/CAMERA" $2-"1/2" $3-S{APPNAME} $4-${FARMTAB_SERIAL
         else
             printf "${BYELLOW}Restarting ${1} script${NC}\n"
             pm2 restart ${APPNAME} --silent --update-env
+            if [ $2 -ne 1 ]; then 
+                pm2 restart "cam_uploader" --silent --update-env
+            fi
+
             # pm2 delete --silent ${SENSOR_APPNAME}
         fi;
         printf "${BGREEN}Done${NC}\n"
