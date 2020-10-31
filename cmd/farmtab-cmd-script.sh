@@ -562,6 +562,14 @@ view_log(){
     pm2 log ${1}
 }
 
+update_arduino(){
+    printf "${BYELLOW} Update Arduino source code${NC}\n"
+    cd /home/pi/Arduino/farmtab-arduino
+    git reset --hard HEAD
+    git pull
+    printf "${BGREEN}Done${NC}\n"
+}
+
 update_software(){
     temp_pwd=$(pwd)
     printf "${BYELLOW} Update Raspberry Pi source code${NC}\n"
@@ -569,13 +577,13 @@ update_software(){
     git reset --hard HEAD
     git pull
     printf "${BGREEN}Done${NC}\n"
-    if [ $APPLICATION_TYPE  != "WORKSHOP" ]; then
-        printf "${BYELLOW} Update Arduino source code${NC}\n"
-        cd /home/pi/Arduino/farmtab-arduino
-        git reset --hard HEAD
-        git pull
-        printf "${BGREEN}Done${NC}\n"
-    fi
+    if [ -z "${APPLICATION_TYPE}" ]; then
+        update_arduino
+    else
+        if [ $APPLICATION_TYPE  != "WORKSHOP" ]; then   
+            update_arduino
+        fi
+    fi  
     chown pi:pi /opt/farmtab-rpi/ -R
     cd $temp_pwd
 }
