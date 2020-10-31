@@ -14,9 +14,7 @@ import schedule  # https://pypi.org/project/schedule/
 # s3_client = boto3.client('s3')
 from func.h_img_join_func import get4X4ImgMerged
 from func.h_arducam_func import changeCam, captureImg
-from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR, TIME_INTERVAL, DEBUG, S3_CFG, FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE, CAP_TIMEOUT
-
-CAM_POSITION = "left_cam"
+from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR, TIME_INTERVAL, DEBUG, S3_CFG, FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE, CAP_TIMEOUT, CAM_POSITION
 
 
 # verify image folder exists and create if it does not
@@ -67,6 +65,7 @@ def uploadToS3(filepath, cam_lvl, cam_slot):
 def uploadAllToS3():
     if (timeNow().hour not in SEND_IMG_HOUR):
         print("INFO - NOT UPLOAD TIME YET - ", timeNow())
+        print("Upload HOURS - ", SEND_IMG_HOUR)
         return
     print("INFO - UPLOADING to S3 ", timeNow())
     # for x in CAM_SLOT_LIST:
@@ -80,6 +79,7 @@ def uploadAllToS3():
         "fpA": getCamFilepath(0), "fpB": getCamFilepath(1), "fpC": getCamFilepath(2), "fpD": getCamFilepath(3)})
     uploadToS3(fp, "COMBINED", getCombinedDesc())
     print("SUCCESS - DONE UPLOADED")
+    print("Upload HOURS - ", SEND_IMG_HOUR)
 
 
 def printDebug(msg):

@@ -194,20 +194,20 @@ check_emp_cam_config(){
 #=====================#
 # FOR CAMERA
 #=====================#
-# promptlr () {
-#     while true; do
-#         read -p ">> Current camera position at left/right side of the shelf :- " lr
-#         case $lr in
-#             [Ll]* ) 
-#                 CAM_POS="Left"
-#                 return 0;;
-#             [Rr]* ) 
-#                 CAM_POS="Right"
-#                 return 1;;
-#             * ) printf "${BRED}Press answer [ L ] or [ R ]${NC}\n";;
-#         esac
-#     done
-# }
+promptlr () {
+    while true; do
+        read -p ">> Current camera position at left/right side of the shelf :- " lr
+        case $lr in
+            [Ll]* ) 
+                CAM_POS="left_cam"
+                return 0;;
+            [Rr]* ) 
+                CAM_POS="right_cam"
+                return 1;;
+            * ) printf "${BRED}Press answer [ L ] or [ R ]${NC}\n";;
+        esac
+    done
+}
 
 promptCameraNum () {
     while true; do
@@ -372,8 +372,8 @@ commit_cam_rotate_change(){ #$1 - value $2 - lvl
 setup_camera_config(){
     clear
     print_camera_config "Current" 0
-    # echo -en "\n${BGWHITE}Camera position :- ${NC} ${RWhite}[ INFO! : Input L/R ]${NC}\n"
-    # promptlr 
+    echo -en "\n${BGWHITE}Camera position :- ${NC} ${RWhite}[ INFO! : Input L/R ]${NC}\n"
+    promptlr 
     echo -en "\n${BGWHITE}Total camera :- ${NC} ${RWhite}[ INFO! : Input 1 ~ 4 ]${NC}\n"
     promptCameraNum 
     #if promptyn "Are you using ArduCam? [Y/N]"; then
@@ -395,9 +395,9 @@ setup_camera_config(){
         else
             unset LVL4
         fi
-        # echo "export CAM_POS=${CAM_POS}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
-        # printf "\n${BGREEN}Committed changes for camera position.${NC}"
-        echo "export TOTAL_CAM=${TOTAL_CAM}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
+        echo "export CAM_POS=${CAM_POS}" > /opt/farmtab-rpi/cmd/farmtab-env-camera
+        printf "\n${BGREEN}Committed changes for camera position.${NC}"
+        echo "export TOTAL_CAM=${TOTAL_CAM}" >> /opt/farmtab-rpi/cmd/farmtab-env-camera
         printf "\n${BGREEN}Committed changes for total camera.${NC}\n"
         commit_cam_change $LVL1 "1"
         commit_cam_rotate_change $RotateLVL1 "1"

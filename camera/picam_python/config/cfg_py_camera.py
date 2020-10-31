@@ -14,6 +14,7 @@ TIME_INTERVAL = {
     "cap_img": os.environ.get('INTERVAL_CAP_IMG', 300)
 }
 IMG_HOUR_TYPE = int(os.environ.get('IMG_HOUR_TYPE', "0"))
+CAM_POSITION = os.environ.get('CAM_POS', "left_cam")
 
 if (IMG_HOUR_TYPE == 0):
     SEND_IMG_HOUR = [9, 11, 13, 15, 17, 19, 21, 23]
