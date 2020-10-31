@@ -12,6 +12,7 @@ import schedule  # https://pypi.org/project/schedule/
 
 # # client = boto3.client('kinesisvideo')
 # s3_client = boto3.client('s3')
+from func.h_api_func import get_dev_type
 from func.h_img_join_func import get4X4ImgMerged
 from func.h_arducam_func import changeCam, captureImg
 from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR, TIME_INTERVAL, DEBUG, S3_CFG, FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE, CAP_TIMEOUT, CAM_POSITION
@@ -31,6 +32,12 @@ def get_curr_datetime():
     utc_dt = datetime.datetime.now(datetime.timezone.utc)  # UTC time
     # local time
     return datetime.datetime.strftime(utc_dt.astimezone(), "%Y-%m-%d %H:%M:%S%z")
+
+
+def get_time_difference_in_sec(time1_in_utc, time2_in_utc):
+    duration = datetime.datetime.strptime(
+        time2_in_utc, "%Y-%m-%d %H:%M:%S%z") - datetime.datetime.strptime(time1_in_utc, "%Y-%m-%d %H:%M:%S%z")
+    return duration.total_seconds()
 
 
 def getCombinedDesc():
@@ -85,3 +92,17 @@ def uploadAllToS3():
 def printDebug(msg):
     if DEBUG == True:
         print("\t [debug] ", str(msg))
+
+
+def sync_cloud_cam_pos():
+    dev_type = get_dev_type(CAM_SERIAL)
+    if (dev_type is None):  # Cannot get Shelf ID - Means not assigned to shelf yet
+        return True
+    else:
+        if(dev_type == "sensor" or dev_type == "dynamic_cam"):
+            return True
+        elif(dev_type == "left_cam" or dev_type == "right_cam"):
+            CAM_POSITION = dev_type
+            return False
+        else:
+            return True
