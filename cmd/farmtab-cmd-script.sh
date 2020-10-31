@@ -57,6 +57,7 @@ print_camera_config() {
         echo -en "${BRED}No ArduCam configuration${NC}\n"
     else 
         echo -en " Total Cameras   : ${BGWHITE}${TOTAL_CAM}${NC}\n"
+        echo -en " Camera Position : ${BGWHITE}${CAM_POS}${NC}\n"
         echo -en " ArduCam slot :-\n"
         echo -en "    > Level 1    : ${BGWHITE}${CAM_SLOT_LVL1}${NC}"
         echo -en "  (Need Rotate : ${BGWHITE}${CAM_ROTATE_LVL1}${NC})\n"
