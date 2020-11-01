@@ -347,7 +347,9 @@ socket.on('request-snapshot', async function(req) {
         // CAM_VIEWS.list.forEach(v => {
         filename = "/home/pi/" + ORG_NAME + "/" + v.toUpperCase() + "_" + CAM_POSITION + ".jpg"
         fileStat = fs.statSync(filename);
-        fileData = fs.readFileSync(filename);
+        fileData = fs.readFileSync(filename, {
+            encoding: 'base64'
+        });
         CAM_FEED_DICT[v].cap_time = fileStat.mtime;
         CAM_FEED_DICT[v].img = fileData;
     };
