@@ -21,6 +21,7 @@ var PM2_OBJ = {
     script: []
 }
 
+var CAM_POSITION = CAMERA.cam_position; // CAM_I2C["camViewList" + CAM_POS];
 var CAM_VIEWS = CAMERA.getCamViewList(); // CAM_I2C["camViewList" + CAM_POS];
 var CAM_FEED_DICT = {
     "lvl1": {
@@ -342,8 +343,14 @@ function updateCurrentCamState(state, can_request = false) {
 
 socket.on('request-snapshot', async function(req) {
 
-    filename = CONFIG.dirpath.pycam + ORG_NAME + "/LVL1.jpg"
-    await fs.stat(filename, (err, stat) => console.log(stat));
+    CAM_VIEWS.list.forEach(v => {
+        filename = CONFIG.dirpath.pycam + ORG_NAME + "/" + v.upper() + "_" + CAM_POSITION + ".jpg"
+        tPos = await fs.stat(filename, (err, stat) => {
+            console.log(stat);
+            return stat
+        });
+        console.log(tPos);
+    });
 
 
     await socket.emit("reply-snapshot", {

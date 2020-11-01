@@ -53,6 +53,8 @@ config.i2c = { // Arducam slot (A - D)
     }
 };
 
+config.cam_position = process.env.CAM_POS || 'left_cam';
+
 
 config.getCamViewList = () => {
     switch (process.env.TOTAL_CAM) {
