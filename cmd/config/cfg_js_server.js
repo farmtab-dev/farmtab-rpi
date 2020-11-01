@@ -6,6 +6,7 @@ config.debug = process.env.DEBUG || false;
  ****************/
 config.dirpath = {};
 config.dirpath.main = "/opt/farmtab-rpi/camera/picam_nodejs/";
+config.dirpath.pycam = "/opt/farmtab-rpi/camera/picam_python/";
 config.dirpath.log = config.dirpath.main + "log/";
 config.dirpath.img = config.dirpath.main + "img_temp_folder/";
 config.dirpath.motion = config.dirpath.main + "img_motion/";

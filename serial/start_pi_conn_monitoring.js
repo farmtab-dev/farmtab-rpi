@@ -342,8 +342,8 @@ function updateCurrentCamState(state, can_request = false) {
 
 socket.on('request-snapshot', async function(req) {
 
-    filename = ORG_NAME + "/LVL1.jpg"
-    await fs.stat('package.json', (err, stat) => console.log(stat.mtimeMs));
+    filename = CONFIG.dirpath.pycam + ORG_NAME + "/LVL1.jpg"
+    await fs.stat(filename, (err, stat) => console.log(stat));
 
 
     await socket.emit("reply-snapshot", {
