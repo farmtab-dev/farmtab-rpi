@@ -344,8 +344,8 @@ function updateCurrentCamState(state, can_request = false) {
 socket.on('request-snapshot', async function(req) {
 
     CAM_VIEWS.list.forEach(v => {
-        filename = CONFIG.dirpath.pycam + ORG_NAME + "/" + v.upper() + "_" + CAM_POSITION + ".jpg"
-        tPos = fs.stat(filename, (err, stat) => {
+        filename = "/home/pi/" + ORG_NAME + "/" + v.toUpperCase() + "_" + CAM_POSITION + ".jpg"
+        tPos = fs.statSync(filename, (err, stat) => {
             console.log(stat);
             return stat
         });
