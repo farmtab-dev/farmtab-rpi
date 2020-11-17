@@ -51,6 +51,10 @@ def getCamFilepath(cindex):
     return FILE_CFG["dirpath"] + '/' + CAM_SLOT_LIST[cindex].upper() + "_" + CAM_POSITION + FILE_CFG["imgfile_ext"] if cindex < len(CAM_SLOT_LIST) else "NONE"
 
 
+def getCamDupFilepath(cindex):
+    return FILE_CFG["dirpath"] + '/' + CAM_SLOT_LIST[cindex].upper() + "_" + CAM_POSITION + "_copy" + FILE_CFG["imgfile_ext"] if cindex < len(CAM_SLOT_LIST) else "NONE"
+
+
 def uploadToS3(filepath, cam_lvl, cam_slot):
     conn = tinys3.Connection(
         S3_CFG['access_key_id'], S3_CFG['secret_access_key'])
@@ -79,11 +83,11 @@ def uploadAllToS3():
     #     f = FILE_CFG["dirpath"] + '/'+ x + FILE_CFG["imgfile_ext"]
     for i in range(len(CAM_SLOT_LIST)):
         camLvl = CAM_SLOT_LIST[i]
-        uploadToS3(getCamFilepath(i), camLvl.upper(), CAM_SLOT_OBJ[camLvl])
+        uploadToS3(getCamDupFilepath(i), camLvl.upper(), CAM_SLOT_OBJ[camLvl])
 
     fp = get4X4ImgMerged(img_cfg=IMG_CFG, file_cfg={
         "dirpath": FILE_CFG["dirpath"],
-        "fpA": getCamFilepath(0), "fpB": getCamFilepath(1), "fpC": getCamFilepath(2), "fpD": getCamFilepath(3)})
+        "fpA": getCamDupFilepath(0), "fpB": getCamDupFilepath(1), "fpC": getCamDupFilepath(2), "fpD": getCamDupFilepath(3)})
     uploadToS3(fp, "COMBINED", getCombinedDesc())
     print("SUCCESS - DONE UPLOADED")
     print("Upload HOURS - ", SEND_IMG_HOUR)

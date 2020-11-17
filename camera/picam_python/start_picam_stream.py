@@ -14,7 +14,7 @@ import schedule  # https://pypi.org/project/schedule/
 # s3_client = boto3.client('s3')
 from config.cfg_py_camera import CAM_SERIAL, SEND_IMG_HOUR, TIME_INTERVAL, DEBUG, S3_CFG, FILE_CFG, IMG_CFG, TOTAL_CAM, CAM_SLOT_OBJ, CAM_SLOT_LIST, CAM_NEED_ROTATE, CAP_TIMEOUT
 
-from h_cam_handler import getCamFilepath, changeCam, printDebug, captureImg, timeNow, get4X4ImgMerged, uploadAllToS3
+from h_cam_handler import getCamFilepath, getCamDupFilepath, changeCam, printDebug, captureImg, timeNow, get4X4ImgMerged, uploadAllToS3
 
 print("Total Camera :", TOTAL_CAM, " => ", CAM_SLOT_OBJ)
 
@@ -35,6 +35,7 @@ def main():
 
         # Build filename string
         filepath = getCamFilepath(i)
+        dupFilepath = getCamDupFilepath(i)
 
         # Change & Take Photo
         changeCam(currCamSlot, isInit)
@@ -42,7 +43,7 @@ def main():
         printDebug("Changed cam slot")
         sleep(TIME_INTERVAL["cap_img"])
         printDebug("Start Capturing " + str(timeNow()))
-        captureImg(filepath, IMG_CFG["width"], IMG_CFG["height"],
+        captureImg(filepath, dupFilepath,  IMG_CFG["width"], IMG_CFG["height"],
                    CAM_NEED_ROTATE[camLvl], currCamSlot, CAP_TIMEOUT)
         printDebug('Taking photo and saving to path ' +
                    filepath + " "+str(timeNow()))

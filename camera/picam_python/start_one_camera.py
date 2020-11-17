@@ -78,6 +78,7 @@ camLvl = CAM_SLOT_LIST[0]
 currCamSlot = CAM_SLOT_OBJ[camLvl]
 # Build filename string
 filepath = getCamFilepath(0)
+dupFilepath = getCamDupFilepath(0)
 changeCam(currCamSlot)
 
 
@@ -93,7 +94,7 @@ def main():
 
         # Change & Take Photo
         sleep(TIME_INTERVAL["cap_img"])
-        captureImg(filepath, IMG_CFG["width"], IMG_CFG["height"],
+        captureImg(filepath, dupFilepath, IMG_CFG["width"], IMG_CFG["height"],
                    CAM_NEED_ROTATE[camLvl], currCamSlot, CAP_TIMEOUT)
         if DEBUG == True:
             print('\t [debug] Taking photo and saving to path ' +
