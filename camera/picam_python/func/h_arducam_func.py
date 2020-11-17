@@ -56,7 +56,7 @@ def changeCam(cam, isInit=False):
 
 # https://www.raspberrypi.org/forums/viewtopic.php?t=56086
 # https://www.raspberrypi.org/forums/viewtopic.php?t=67175#:~:text=raspistill%20will%20exit%20after%205s,0%22%20to%20disable%20this%20timeout.
-def captureImg(filepath, dupFilepath, width, height, rotate, cam, cap_timeout):
+def captureImg(dupFilepath, filepath, width, height, rotate, cam, cap_timeout):
     if (rotate):
         # cmd = "raspistill -t 0 -s -o "+ filepath + " -w " +str(width) +" -h "+ str(height)+" -rot 180"
         cmd = "raspistill -t "+str(cap_timeout)+" -o " + filepath + \
